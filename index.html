@@ -10,6 +10,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<meta name="description" content="Phare — anti-paralysie pour cerveau ADHD. Une seule action à la fois.">
 <title>Phare — une seule action à la fois</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,7 +44,7 @@ body{font-family:"Atkinson Hyperlegible",system-ui,sans-serif;background:var(--b
 body::before{content:"";position:fixed;inset:-20% 0 auto 0;height:70vh;z-index:0;pointer-events:none;background:radial-gradient(120% 80% at 50% -10%, var(--beam-a), transparent 55%),radial-gradient(90% 60% at 80% 0%, var(--beam-b), transparent 60%);filter:blur(6px);animation:breathe 9s ease-in-out infinite;}
 body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 @keyframes breathe{0%,100%{opacity:.85;transform:translateY(0)}50%{opacity:1;transform:translateY(-8px)}}
-@media (prefers-reduced-motion:reduce){body::before{animation:none}}
+@media (prefers-reduced-motion:reduce){body::before{animation:none}.breath-orb{animation:none!important}}
 
 .app{position:relative;z-index:2;max-width:540px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;}
 header{padding:max(18px,env(safe-area-inset-top)) 20px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
@@ -52,8 +53,10 @@ header{padding:max(18px,env(safe-area-inset-top)) 20px 10px;display:flex;align-i
 .beacon svg{width:100%;height:100%;display:block;}
 .brand h1{font-family:"Fraunces",serif;font-weight:600;font-size:1.5rem;letter-spacing:-.01em;line-height:1;}
 .brand .tag{font-size:.72rem;color:var(--ink-faint);letter-spacing:.02em;margin-top:2px;}
-.head-r{display:flex;align-items:center;gap:9px}
-.plan-chip{font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:20px;border:1px solid var(--line)}
+.head-r{display:flex;align-items:center;gap:8px}
+.sos-btn{border:1px solid var(--urgent);color:var(--urgent);background:var(--urgent-soft);font-family:inherit;font-weight:800;font-size:.7rem;letter-spacing:.08em;padding:9px 12px;border-radius:13px;cursor:pointer;transition:.2s}
+.sos-btn:active{transform:scale(.93)}
+.plan-chip{font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:6px 10px;border-radius:20px;border:1px solid var(--line)}
 .plan-chip.free{color:var(--ink-faint);background:var(--surface)}
 .plan-chip.pro{color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,transparent);border-color:transparent}
 .ico-btn{width:42px;height:42px;border:1px solid var(--line);background:var(--surface);border-radius:13px;color:var(--ink-soft);display:grid;place-items:center;cursor:pointer;font-size:1.15rem;transition:.2s;}
@@ -70,6 +73,8 @@ main{flex:1;padding:6px 18px 130px;overflow-y:auto;}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 4px 20px -12px var(--shadow);margin-bottom:14px;}
 .eyebrow{font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-faint);font-weight:700;margin-bottom:9px;display:flex;align-items:center;gap:7px;}
 .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);}
+.eyebrow.calm::before{background:var(--primary)}
+.eyebrow.warm::before{background:var(--accent)}
 
 .now-hero{position:relative;background:linear-gradient(160deg,var(--surface),var(--surface-2));border:1px solid var(--line);border-radius:26px;padding:26px 22px 22px;overflow:hidden;box-shadow:0 16px 40px -22px var(--shadow-lg);margin-bottom:16px;}
 .now-hero::before{content:"";position:absolute;top:-60px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,var(--accent-soft),transparent 70%);opacity:.7;}
@@ -84,6 +89,7 @@ main{flex:1;padding:6px 18px 130px;overflow-y:auto;}
 .btn-go:hover{box-shadow:0 12px 28px -8px var(--accent)}
 .btn-ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--line);}
 .btn-ghost:hover{border-color:var(--ink-faint);color:var(--ink)}
+.btn-calm{background:var(--primary);color:#04140f;box-shadow:0 8px 22px -8px var(--primary);flex:1}
 .btn-sm{padding:9px 13px;min-height:40px;font-size:.85rem;border-radius:11px;}
 .btn-block{width:100%}
 .now-empty{font-family:"Fraunces",serif;font-size:1.35rem;line-height:1.3;color:var(--ink-soft);position:relative;}
@@ -97,6 +103,20 @@ main{flex:1;padding:6px 18px 130px;overflow-y:auto;}
 .energy-hint{margin-top:12px;font-size:.85rem;color:var(--ink-soft);padding:11px 13px;background:var(--surface-2);border-radius:12px;display:none;}
 .energy-hint.show{display:block}
 
+.mood-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mood-opt{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:11px 4px;text-align:center;cursor:pointer;transition:.18s;font-size:.66rem;font-weight:700;color:var(--ink-soft);display:flex;flex-direction:column;align-items:center;gap:5px}
+.mood-opt:active{transform:scale(.94)}
+.mood-opt .me{font-size:1.5rem;line-height:1}
+.mood-opt.on{border-color:var(--primary);background:var(--primary-soft);color:var(--primary)}
+.mood-reply{margin-top:12px;font-size:.88rem;color:var(--ink-soft);background:var(--surface-2);border-radius:12px;padding:12px 14px;display:none;line-height:1.45}
+.mood-reply.show{display:block}
+.mlog{display:flex;align-items:center;gap:11px;padding:9px 2px;border-bottom:1px solid var(--line)}
+.mlog:last-child{border:none}
+.mlog .me{font-size:1.4rem}
+.mlog .ml-l{flex:1}
+.mlog .ml-l b{font-size:.9rem;font-weight:700}
+.mlog .ml-l span{display:block;font-size:.72rem;color:var(--ink-faint)}
+
 .rt{display:flex;align-items:center;gap:12px;padding:11px 4px;border-bottom:1px solid var(--line);}
 .rt:last-child{border-bottom:none}
 .check{width:26px;height:26px;border-radius:9px;border:2px solid var(--line);flex:0 0 auto;cursor:pointer;display:grid;place-items:center;transition:.18s;color:transparent;font-size:.8rem;font-weight:900;}
@@ -108,6 +128,9 @@ main{flex:1;padding:6px 18px 130px;overflow-y:auto;}
 .add-inline{display:flex;gap:8px;margin-top:12px;}
 .add-inline input{flex:1;background:var(--surface-2);border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-family:inherit;font-size:.9rem;color:var(--ink);}
 .add-inline input:focus{outline:none;border-color:var(--accent)}
+
+.ritual-card{position:relative;overflow:hidden}
+.ritual-card .rc-emoji{font-size:1.6rem}
 
 .seg{display:flex;gap:6px;background:var(--surface-2);padding:5px;border-radius:13px;margin-bottom:16px;}
 .seg button{flex:1;border:none;background:transparent;padding:9px;border-radius:9px;font-family:inherit;font-weight:700;font-size:.82rem;color:var(--ink-soft);cursor:pointer;transition:.2s;}
@@ -125,6 +148,7 @@ main{flex:1;padding:6px 18px 130px;overflow-y:auto;}
 .pill.p3{background:var(--primary-soft);color:var(--primary)} .pill.p4{background:var(--surface-2);color:var(--ink-faint)}
 .pill.q{background:var(--play-soft);color:var(--play)}
 .pill.steps{background:var(--surface-2);color:var(--ink-soft)}
+.pill.cat{background:var(--surface-2);color:var(--ink-faint)}
 .task .check{margin-top:1px}
 .empty{text-align:center;padding:40px 20px;color:var(--ink-faint);}
 .empty .big{font-family:"Fraunces",serif;font-size:2.4rem;margin-bottom:10px;opacity:.4}
@@ -169,7 +193,6 @@ main{flex:1;padding:6px 18px 130px;overflow-y:auto;}
 .picked .what{font-family:"Fraunces",serif;font-size:1.4rem;margin:6px 0;}
 @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
 
-/* freemium locks */
 .lockwrap{position:relative;border-radius:18px}
 .lock-ov{display:none;position:absolute;inset:0;z-index:6;flex-direction:column;align-items:center;justify-content:center;gap:11px;text-align:center;padding:24px;border-radius:inherit;cursor:pointer;background:color-mix(in srgb,var(--bg) 38%,transparent)}
 .lock-ov .ttl{font-family:"Fraunces",serif;font-size:1.15rem;color:var(--ink)}
@@ -177,6 +200,14 @@ main{flex:1;padding:6px 18px 130px;overflow-y:auto;}
 [data-plan="free"] .lockwrap>.lock-content{filter:blur(6px);pointer-events:none;user-select:none;opacity:.6}
 [data-plan="free"] .lockwrap>.lock-ov{display:flex}
 .lock-badge{font-size:.66rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,transparent);padding:5px 12px;border-radius:20px;display:inline-flex;gap:6px;align-items:center}
+
+.contact-item{display:flex;align-items:center;gap:11px;padding:11px 2px;border-bottom:1px solid var(--line)}
+.contact-item:last-child{border:none}
+.contact-item .ci-b{flex:1}
+.contact-item .ci-b b{font-size:.92rem}
+.contact-item .ci-b span{display:block;font-size:.76rem;color:var(--ink-faint)}
+.contact-item a{color:var(--primary);font-weight:700;text-decoration:none;font-size:.85rem;border:1px solid var(--primary);padding:7px 12px;border-radius:11px}
+.legal-box{border:1px solid var(--urgent);background:var(--urgent-soft);border-radius:14px;padding:14px 16px;font-size:.85rem;line-height:1.5;color:var(--ink)}
 
 .fab{position:fixed;right:max(18px,calc((100vw - 540px)/2 + 18px));bottom:92px;width:60px;height:60px;border-radius:20px;border:none;background:var(--accent);color:#1a1206;font-size:1.8rem;box-shadow:0 12px 30px -8px var(--accent);cursor:pointer;z-index:30;display:grid;place-items:center;transition:transform .2s;}
 .fab:active{transform:scale(.9) rotate(90deg)}
@@ -197,6 +228,10 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:25;padding:8px 10px max(8px,e
 .field-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-faint);font-weight:700;margin:18px 0 9px;}
 .txt{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:13px 15px;font-family:inherit;font-size:1rem;color:var(--ink);resize:vertical;}
 .txt:focus{outline:none;border-color:var(--accent)}
+.cap-wrap{position:relative}
+.mic-btn{position:absolute;right:10px;bottom:10px;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--accent);font-size:1.1rem;cursor:pointer;display:grid;place-items:center;transition:.2s}
+.mic-btn.rec{background:var(--urgent);color:#fff;border-color:var(--urgent);animation:micpulse 1.1s ease-in-out infinite}
+@keyframes micpulse{0%,100%{box-shadow:0 0 0 0 var(--urgent-soft)}50%{box-shadow:0 0 0 8px transparent}}
 .prio-pick{display:flex;gap:8px;}
 .prio-pick button{flex:1;border:1px solid var(--line);background:var(--surface);padding:11px 4px;border-radius:11px;font-family:inherit;font-weight:700;font-size:.78rem;cursor:pointer;color:var(--ink-soft);transition:.15s}
 .prio-pick button.on[data-p="1"]{background:var(--urgent-soft);color:var(--urgent);border-color:var(--urgent)}
@@ -218,15 +253,16 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:25;padding:8px 10px max(8px,e
 .feat .ck{color:var(--success);font-weight:900}
 .feat b{font-size:.92rem}
 .feat div div{font-size:.8rem;color:var(--ink-soft)}
+.script-pre{white-space:pre-wrap;font-family:inherit;font-size:.86rem;color:var(--ink-soft);line-height:1.55;margin:0 0 12px;background:var(--surface-2);padding:13px;border-radius:12px}
 
-.confetti{position:fixed;top:-12px;width:9px;height:14px;z-index:60;pointer-events:none;border-radius:2px;}
+.confetti{position:fixed;top:-12px;width:9px;height:14px;z-index:100;pointer-events:none;border-radius:2px;}
 @keyframes drop{to{transform:translateY(105vh) rotate(540deg);opacity:0}}
-.toast{position:fixed;left:50%;bottom:160px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:13px 20px;border-radius:14px;font-weight:700;font-size:.9rem;z-index:70;opacity:0;transition:.3s;pointer-events:none;box-shadow:0 10px 30px -8px var(--shadow-lg)}
+.toast{position:fixed;left:50%;bottom:160px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:13px 20px;border-radius:14px;font-weight:700;font-size:.9rem;z-index:110;opacity:0;transition:.3s;pointer-events:none;box-shadow:0 10px 30px -8px var(--shadow-lg);max-width:88vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* auth */
-#auth{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
-#auth.hidden{display:none}
+#auth,#onboard,#sos{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
+#auth{z-index:50}#onboard{z-index:55}#sos{z-index:60}
+#auth.hidden,#onboard.hidden,#sos.hidden{display:none}
 .auth-brand{display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:24px;text-align:center}
 .auth-brand .beacon{width:58px;height:58px}
 .auth-brand h1{font-family:"Fraunces",serif;font-weight:600;font-size:2.5rem;letter-spacing:-.02em;line-height:1}
@@ -237,8 +273,43 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:25;padding:8px 10px max(8px,e
 .auth-toggle button.on{background:var(--surface);color:var(--ink);box-shadow:0 2px 8px -4px var(--shadow)}
 .auth-field{margin-bottom:13px}
 .auth-field label{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-faint);font-weight:700;margin-bottom:7px}
+.auth-legal{display:flex;gap:10px;align-items:flex-start;margin:4px 2px 14px;font-size:.78rem;color:var(--ink-soft);line-height:1.4;cursor:pointer}
+.auth-legal input{margin-top:2px;width:18px;height:18px;flex:0 0 auto;accent-color:var(--accent)}
 .auth-err{color:var(--urgent);font-size:.82rem;min-height:1.1em;margin:2px 2px 12px}
 .auth-foot{font-size:.76rem;color:var(--ink-faint);text-align:center;margin-top:18px;max-width:392px;line-height:1.5}
+
+.onb-card{width:100%;max-width:404px;text-align:center}
+.onb-prog{display:flex;gap:5px;justify-content:center;margin-bottom:26px}
+.onb-prog i{width:26px;height:4px;border-radius:2px;background:var(--line);transition:.3s}
+.onb-prog i.on{background:var(--accent)}
+.onb-emoji{font-size:2.6rem;margin-bottom:14px}
+.onb-card h2{font-family:"Fraunces",serif;font-weight:600;font-size:1.7rem;line-height:1.25;margin-bottom:10px}
+.onb-card p.lead{color:var(--ink-soft);font-size:.95rem;line-height:1.5;margin-bottom:26px}
+.onb-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.onb-opt{border:1px solid var(--line);background:var(--surface);border-radius:15px;padding:15px;font-family:inherit;font-weight:700;font-size:.95rem;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:12px;transition:.18s;text-align:left}
+.onb-opt:active{transform:scale(.98)}
+.onb-opt:hover{border-color:var(--accent)}
+.onb-opt .oe{font-size:1.5rem}
+.onb-skip{background:none;border:none;color:var(--ink-faint);font-family:inherit;font-size:.82rem;cursor:pointer;margin-top:6px;text-decoration:underline}
+
+.sos-inner{width:100%;max-width:440px}
+.sos-head{text-align:center;margin-bottom:22px}
+.sos-head .se{font-size:2.4rem;margin-bottom:8px}
+.sos-head h2{font-family:"Fraunces",serif;font-weight:600;font-size:1.6rem;margin-bottom:6px}
+.sos-head p{color:var(--ink-soft);font-size:.9rem;line-height:1.5}
+.sos-opt{width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:17px;margin-bottom:11px;cursor:pointer;display:flex;gap:14px;align-items:flex-start;font-family:inherit;transition:.18s}
+.sos-opt:active{transform:scale(.98)}
+.sos-opt .so-e{font-size:1.8rem;flex:0 0 auto}
+.sos-opt b{font-size:1rem;display:block;margin-bottom:3px}
+.sos-opt span{font-size:.82rem;color:var(--ink-soft);line-height:1.45}
+.sos-close{background:none;border:none;color:var(--ink-faint);font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;margin-top:14px;padding:10px}
+.breath-stage{text-align:center;padding:10px 0 4px}
+.breath-orb{width:190px;height:190px;border-radius:50%;margin:0 auto 24px;background:radial-gradient(circle at 50% 40%,var(--primary),color-mix(in srgb,var(--primary) 40%,transparent));box-shadow:0 0 60px -10px var(--primary);transform:scale(.55);transition:transform linear}
+.breath-phase{font-family:"Fraunces",serif;font-size:1.6rem;margin-bottom:4px}
+.breath-count{font-size:2.4rem;font-variant-numeric:tabular-nums;color:var(--ink-soft);font-family:"Fraunces",serif}
+.breath-cycle{font-size:.8rem;color:var(--ink-faint);margin-top:8px}
+.tel-list a{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-bottom:9px;text-decoration:none;color:var(--ink);font-weight:700}
+.tel-list a .num{color:var(--urgent);font-family:"Fraunces",serif;font-size:1.2rem}
 /* install pop */
 .install-pop{position:fixed;left:12px;right:12px;bottom:12px;max-width:516px;margin:0 auto;z-index:95;display:flex;align-items:center;gap:13px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:14px 14px 14px 16px;box-shadow:0 18px 50px -16px var(--shadow-lg);transform:translateY(180%);opacity:0;transition:transform .4s cubic-bezier(.2,.9,.3,1),opacity .3s;}
 .install-pop.show{transform:translateY(0);opacity:1}
@@ -249,13 +320,60 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:25;padding:8px 10px max(8px,e
 .install-pop .ip-body span{font-size:.78rem;color:var(--ink-soft);display:block;margin-top:2px;line-height:1.4}
 .install-pop .ip-act{display:flex;align-items:center;gap:6px;flex:0 0 auto}
 .install-pop .ip-x{border:none;background:transparent;color:var(--ink-faint);font-size:1.4rem;cursor:pointer;padding:4px 8px;line-height:1}
-.install-pop .ip-x:hover{color:var(--ink)}
 .ios-share{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:0 5px;font-weight:700;color:var(--accent)}
+
+/* ---- Vie hub / Finances / Famille / Profilage / Légal ---- */
+.hub-card{display:flex;align-items:center;gap:14px;cursor:pointer}
+.hub-card .he{font-size:1.9rem;flex:0 0 auto}
+.hub-card .hb{flex:1}
+.hub-card .hb b{font-family:"Fraunces",serif;font-size:1.2rem;display:block}
+.hub-card .hb span{font-size:.82rem;color:var(--ink-soft)}
+.hub-card .hc{color:var(--ink-faint);font-size:1.4rem}
+.back-row{display:flex;align-items:center;gap:8px;margin:2px 0 14px}
+.back-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);border-radius:11px;padding:8px 13px;font-family:inherit;font-weight:700;font-size:.82rem;cursor:pointer}
+.acc{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.acc:last-child{border:none}
+.adot{width:12px;height:12px;border-radius:50%;flex:0 0 auto}
+.adot.r{background:var(--urgent)} .adot.o{background:var(--accent)} .adot.g{background:var(--success)}
+.acc .a-b{flex:1;min-width:0} .acc .a-b b{font-size:.95rem} .acc .a-b span{display:block;font-size:.74rem;color:var(--ink-faint)}
+.acc .a-v{font-family:"Fraunces",serif;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.acc .a-v.neg{color:var(--urgent)}
+.fin-tot{font-family:"Fraunces",serif;font-size:2rem;line-height:1;font-variant-numeric:tabular-nums}
+.fin-tot.neg{color:var(--urgent)}
+.ev{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+.ev:last-child{border:none}
+.ev .e-d{flex:0 0 54px;text-align:center;background:var(--surface-2);border-radius:11px;padding:7px 4px}
+.ev .e-d b{display:block;font-family:"Fraunces",serif;font-size:1.25rem;line-height:1}
+.ev .e-d span{font-size:.6rem;text-transform:uppercase;color:var(--ink-faint);letter-spacing:.04em}
+.ev .e-b{flex:1;min-width:0} .ev .e-b b{font-size:.95rem;display:block} .ev .e-b span{font-size:.76rem;color:var(--ink-faint)}
+.ev .x{color:var(--ink-faint);cursor:pointer;padding:4px;font-size:1.1rem;opacity:.6}
+.load-item{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--line)}
+.load-item:last-child{border:none}
+.load-item .t{flex:1;font-size:.92rem}
+.load-item.done .t{color:var(--ink-faint);text-decoration:line-through}
+.likert{display:flex;gap:6px;margin-top:9px}
+.likert button{flex:1;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 2px;font-family:inherit;font-size:.62rem;font-weight:700;color:var(--ink-soft);cursor:pointer;transition:.15s;line-height:1.2}
+.likert button.on{border-color:var(--primary);background:var(--primary-soft);color:var(--primary)}
+.prof-q{margin-bottom:17px;text-align:left}
+.prof-q .q{font-size:.95rem;font-weight:700;line-height:1.35}
+.prof-wrap{text-align:left;max-width:460px;width:100%}
+.prof-modhead{font-family:"Fraunces",serif;font-size:1.45rem;margin-bottom:4px;text-align:left}
+.prof-modsub{color:var(--ink-soft);font-size:.88rem;margin-bottom:18px;text-align:left}
+.arche{border-radius:24px;padding:32px 22px;text-align:center;color:#fff;margin-bottom:18px}
+.arche .ae{font-size:3rem;margin-bottom:10px}
+.arche h2{font-size:1.7rem;font-weight:600;margin:0 0 4px;font-family:"Fraunces",serif}
+.arche .code{font-size:.78rem;opacity:.85}
+.legal-tabs{display:flex;gap:5px;background:var(--surface-2);padding:5px;border-radius:12px;margin:14px 0;overflow-x:auto}
+.legal-tabs button{flex:0 0 auto;border:none;background:transparent;padding:8px 12px;border-radius:9px;font-family:inherit;font-weight:700;font-size:.78rem;color:var(--ink-soft);cursor:pointer;white-space:nowrap}
+.legal-tabs button.on{background:var(--surface);color:var(--ink)}
+.legal-body{font-size:.86rem;line-height:1.6;color:var(--ink-soft)}
+.legal-body h4{font-family:"Fraunces",serif;font-size:1.05rem;color:var(--ink);margin:16px 0 6px}
+.legal-body p{margin-bottom:10px}
 </style>
 </head>
 <body>
 
-<!-- ===== AUTH ===== -->
+<!-- AUTH -->
 <div id="auth">
   <div class="auth-brand">
     <span class="beacon"><svg viewBox="0 0 40 40" fill="none"><path d="M20 3 L25 30 H15 Z" fill="var(--accent)"/><path d="M20 3 L25 30 H20 Z" fill="var(--primary)" opacity=".85"/><rect x="13" y="30" width="14" height="6" rx="2" fill="var(--ink)"/><g stroke="var(--accent)" stroke-width="2" stroke-linecap="round" opacity=".7"><path d="M22 8 L33 4"/><path d="M22 11 L34 12"/></g></svg></span>
@@ -266,11 +384,18 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:25;padding:8px 10px max(8px,e
     <div class="auth-field" id="authName"><label>Prénom</label><input class="txt" id="authNameInp" placeholder="Ton prénom" autocomplete="name"></div>
     <div class="auth-field"><label>Email</label><input class="txt" id="authEmail" type="email" placeholder="toi@email.com" autocomplete="email"></div>
     <div class="auth-field"><label>Mot de passe</label><input class="txt" id="authPwd" type="password" placeholder="••••••" autocomplete="current-password"></div>
+    <label class="auth-legal" id="authLegal"><input type="checkbox" id="legalChk"><span>Je comprends que Phare est un outil d'organisation et de bien-être, <b>pas un dispositif médical ni un soin</b>. En cas de détresse, j'appelle le 3114.</span></label>
     <div class="auth-err" id="authErr"></div>
     <button class="btn btn-go btn-block" id="authSubmit" data-action="auth-submit">Se connecter</button>
   </div>
   <div class="auth-foot">Démo — tes identifiants restent sur cet appareil (aucun serveur). Pour de l'auth réelle, Supabase Auth se branche ici.</div>
 </div>
+
+<!-- ONBOARDING -->
+<div id="onboard" class="hidden"><div class="onb-card" id="onbCard"></div></div>
+
+<!-- SOS -->
+<div id="sos" class="hidden"><div class="sos-inner" id="sosBody"></div></div>
 
 <div class="app">
   <header>
@@ -279,6 +404,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:25;padding:8px 10px max(8px,e
       <div><h1>Phare</h1><div class="tag">une seule action à la fois</div></div>
     </div>
     <div class="head-r">
+      <button class="sos-btn" data-action="sos-open" aria-label="Aide immédiate">SOS</button>
       <span class="plan-chip free" id="planChip">Gratuit</span>
       <button class="ico-btn" data-action="theme-toggle" title="Thème" aria-label="Changer de thème"><span id="themeIco">☾</span></button>
     </div>
@@ -288,6 +414,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:25;padding:8px 10px max(8px,e
     <!-- MAINTENANT -->
     <section class="screen active" id="screen-now">
       <div class="now-hero" id="nowHero"></div>
+      <div id="ritualSlot"></div>
       <div class="card">
         <div class="eyebrow">Ton énergie là, maintenant</div>
         <div class="energy-row">
@@ -296,6 +423,11 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:25;padding:8px 10px max(8px,e
           <div class="eb" data-action="energy" data-level="basse"><div class="dot"></div>Basse</div>
         </div>
         <div class="energy-hint" id="energyHint"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow calm">Comment ça va</div>
+        <div class="mood-grid" id="moodGrid"></div>
+        <div class="mood-reply" id="moodReply"></div>
       </div>
       <div class="card">
         <div class="eyebrow">À trier <span style="margin-left:auto;font-weight:700;color:var(--accent)" id="inboxCount"></span></div>
@@ -308,6 +440,15 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:25;padding:8px 10px max(8px,e
           <input id="routineInput" placeholder="Ajouter une routine…" maxlength="60">
           <button class="btn btn-go btn-sm" data-action="routine-add">+</button>
         </div>
+      </div>
+      <div class="lockwrap">
+        <div class="lock-content">
+          <div class="card" style="margin-bottom:0" data-action="scripts-open">
+            <div class="eyebrow warm">Messages difficiles</div>
+            <p style="font-size:.9rem;color:var(--ink-soft);margin:0">Scripts prêts : relance impayé, hausse de tarifs, dire non, client difficile. Copie, adapte, envoie.</p>
+          </div>
+        </div>
+        <div class="lock-ov" data-action="paywall"><span class="lock-badge">🔒 Pro</span><div class="ttl">Messages difficiles</div><button class="btn btn-go btn-sm" data-action="paywall">Débloquer · 9,99€/mois</button></div>
       </div>
     </section>
 
@@ -340,22 +481,20 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:25;padding:8px 10px max(8px,e
         <button class="btn btn-go btn-block" id="focusBtn" data-action="focus-toggle">Démarrer le focus</button>
       </div>
       <div class="bd-msg" id="bdMsg"></div>
-
       <div class="lockwrap">
         <div class="lock-content">
           <div class="card" style="margin-bottom:0">
-            <div class="eyebrow">Sas de transition · 3 min</div>
+            <div class="eyebrow calm">Sas de transition · 3 min</div>
             <p class="note" style="margin-top:0">Bloqué entre deux tâches ? Un rituel court pour vider la tête avant d'enchaîner.</p>
             <button class="btn btn-ghost btn-block" style="margin-top:12px" data-action="cleanser-start">Lancer le sas</button>
           </div>
         </div>
         <div class="lock-ov" data-action="paywall"><span class="lock-badge">🔒 Pro</span><div class="ttl">Sas de transition</div><button class="btn btn-go btn-sm" data-action="paywall">Débloquer · 9,99€/mois</button></div>
       </div>
-
       <div class="lockwrap" style="margin-top:14px">
         <div class="lock-content">
           <div class="card" style="margin-bottom:0">
-            <div class="eyebrow">Sessions cette semaine</div>
+            <div class="eyebrow calm">Sessions cette semaine</div>
             <div id="focusLog"></div>
           </div>
         </div>
@@ -402,22 +541,45 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:25;padding:8px 10px max(8px,e
         <div class="stat"><b id="stFocus">0</b><span>min de focus (7j)</span></div>
         <div class="stat"><b id="stTasks">0</b><span>tâches actives</span></div>
       </div>
+      <div class="card">
+        <div class="eyebrow calm">Ton humeur récente</div>
+        <div id="moodHistory"></div>
+      </div>
+      <div class="lockwrap">
+        <div class="lock-content">
+          <div class="card" style="margin-bottom:0"><div class="eyebrow calm">Tendances sur 7 jours</div><div id="moodPatterns"></div></div>
+        </div>
+        <div class="lock-ov" data-action="paywall"><span class="lock-badge">🔒 Pro</span><div class="ttl">Tendances d'humeur</div><button class="btn btn-go btn-sm" data-action="paywall">Débloquer · 9,99€/mois</button></div>
+      </div>
       <div class="lockwrap">
         <div class="lock-content">
           <div class="card" style="margin-bottom:0"><div class="eyebrow">7 derniers jours</div><div class="streak-days" id="streakDays"></div></div>
         </div>
         <div class="lock-ov" data-action="paywall"><span class="lock-badge">🔒 Pro</span><div class="ttl">Calendrier de série</div><button class="btn btn-go btn-sm" data-action="paywall">Débloquer · 9,99€/mois</button></div>
       </div>
+      <div class="card" id="profileCard" style="display:none">
+        <div class="eyebrow">Ton profil</div>
+        <div id="profileBody"></div>
+        <button class="btn btn-ghost btn-block btn-sm" style="margin-top:12px" data-action="onb-restart">Refaire le profilage</button>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Contacts de confiance</div>
+        <p style="font-size:.82rem;color:var(--ink-faint);margin:-4px 0 12px">Tes proches à appeler quand ça déborde. Ils apparaissent dans le SOS.</p>
+        <div id="contactList"></div>
+        <button class="btn btn-ghost btn-block btn-sm" style="margin-top:10px" data-action="contact-add">+ Ajouter un contact</button>
+      </div>
       <div class="card">
         <div class="eyebrow">Compte</div>
         <div id="accInfo" style="margin-bottom:14px"></div>
         <button class="btn btn-go btn-block" id="goPro" data-action="paywall" style="margin-bottom:10px">Passer Pro · 9,99€/mois</button>
         <button class="btn btn-ghost btn-block" data-action="theme-toggle" style="margin-bottom:10px">Basculer jour / nuit</button>
+        <button class="btn btn-ghost btn-block" data-action="legal-open" style="margin-bottom:10px">Mentions & confidentialité</button>
         <button class="btn btn-ghost btn-block" data-action="logout" style="margin-bottom:10px">Se déconnecter</button>
         <button class="btn btn-ghost btn-block danger" data-action="reset-data">Réinitialiser les données</button>
-        <p class="note">Phare est une béquille, pas un soin. Pour le diagnostic, la médication ou un mal-être (RSD, anxiété, burnout), parle à un professionnel.</p>
+        <p class="note">Phare est une béquille, pas un soin. Pour le diagnostic, la médication ou un mal-être (RSD, anxiété, burnout), parle à un professionnel. Détresse : 3114 (gratuit, 24h/24).</p>
       </div>
     </section>
+    <section class="screen" id="screen-vie"></section>
   </main>
 
   <button class="fab" data-action="capture-open" aria-label="Capture rapide">+</button>
@@ -428,6 +590,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:25;padding:8px 10px max(8px,e
       <button class="nav-btn" data-action="nav" data-screen="tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01" stroke-linecap="round"/></svg>Tâches</button>
       <button class="nav-btn" data-action="nav" data-screen="focus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round"/></svg>Focus</button>
       <button class="nav-btn" data-action="nav" data-screen="boost"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M13 2L4 14h6l-1 8 9-12h-6z" stroke-linecap="round" stroke-linejoin="round"/></svg>Boost</button>
+      <button class="nav-btn" data-action="nav" data-screen="vie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z" stroke-linejoin="round"/></svg>Vie</button>
       <button class="nav-btn" data-action="nav" data-screen="me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6" stroke-linecap="round"/></svg>Moi</button>
     </div>
   </nav>
@@ -440,15 +603,14 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:25;padding:8px 10px max(8px,e
   <div class="ip-ic"><svg viewBox="0 0 40 40" fill="none"><path d="M20 3 L25 30 H15 Z" fill="var(--accent)"/><path d="M20 3 L25 30 H20 Z" fill="var(--primary)" opacity=".85"/><rect x="13" y="30" width="14" height="6" rx="2" fill="var(--ink)"/></svg></div>
   <div class="ip-body">
     <b>Installer Phare</b>
-    <span id="ipAndroid">Acc&egrave;s direct, plein &eacute;cran, fonctionne hors-ligne.</span>
-    <span id="ipIos" style="display:none">Touche <span class="ios-share">Partager &#8593;</span> puis &laquo;&nbsp;Sur l'&eacute;cran d'accueil&nbsp;&raquo;.</span>
+    <span id="ipAndroid">Accès direct, plein écran, fonctionne hors-ligne.</span>
+    <span id="ipIos" style="display:none">Touche <span class="ios-share">Partager &#8593;</span> puis «&nbsp;Sur l'écran d'accueil&nbsp;».</span>
   </div>
   <div class="ip-act">
     <button class="btn btn-go btn-sm" id="installBtn">Installer</button>
     <button class="ip-x" id="installLater" aria-label="Plus tard">&times;</button>
   </div>
 </div>
-
 <script>
 "use strict";
 const Store=(()=>{let ok=false;try{localStorage.setItem("__phare_t","1");localStorage.removeItem("__phare_t");ok=true;}catch(e){ok=false;}const mem={};return{get(k){try{return ok?localStorage.getItem(k):(mem[k]??null);}catch(e){return mem[k]??null;}},set(k,v){try{ok?localStorage.setItem(k,v):(mem[k]=v);}catch(e){mem[k]=v;}}};})();
@@ -456,6 +618,7 @@ const KEY="phare.v1", AKEY="phare.auth";
 const todayStr=()=>new Date().toISOString().slice(0,10);
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ---------- app data ---------- */
 let S;
@@ -463,7 +626,10 @@ function defaults(){return{
   tasks:[],
   routines:[{id:uid(),lbl:"Médicaments",done:false,date:""},{id:uid(),lbl:"Boire de l'eau",done:false,date:""},{id:uid(),lbl:"Bouger 5 min",done:false,date:""},{id:uid(),lbl:"Manger un vrai repas",done:false,date:""}],
   menu:{app:["10 pompes","Marche 5 min","Étirements + fenêtre ouverte","Danse sur 1 son","Range 5 objets"],ent:["Bloc de 20 min sur la tâche n°1","Vide ta boîte mail","Avance le projet prioritaire","Écris 200 mots"],side:["Gribouille 1 idée","Voice memo d'une idée","Joue 1 morceau","Note 3 trucs à kiffer"]},
-  focus:[], energy:{date:"",level:""}, xp:0, done:0, streak:0, lastActive:"", days:{}, theme:"dark"
+  focus:[], energy:{date:"",level:""}, moods:[], trustedContacts:[], ritualLog:{},
+  finances:{accounts:[{id:uid(),name:"Compte pro",balance:1200,red:200,orange:600},{id:uid(),name:"Compte perso",balance:800,red:150,orange:400}],echeances:[{id:uid(),label:"URSSAF",amount:340,date:""},{id:uid(),label:"Loyer / charges",amount:650,date:""}]},
+  family:{events:[],load:[{id:uid(),t:"Prendre le RDV pédiatre",done:false},{id:uid(),t:"Signer le mot du carnet",done:false}]},
+  xp:0, done:0, streak:0, lastActive:"", days:{}, theme:"dark"
 };}
 function load(){try{S=JSON.parse(Store.get(KEY))||defaults();}catch(e){S=defaults();}const d=defaults();for(const k in d){if(S[k]===undefined)S[k]=d[k];}resetDailyRoutines();}
 function save(){Store.set(KEY,JSON.stringify(S));}
@@ -478,6 +644,7 @@ function isPro(){const u=currentUser();return !!(u&&u.plan==="pro");}
 function renderAuth(){
   $("#authToggle").innerHTML=`<button class="${authMode==='login'?'on':''}" data-action="auth-tab" data-m="login">Connexion</button><button class="${authMode==='signup'?'on':''}" data-action="auth-tab" data-m="signup">Créer un compte</button>`;
   $("#authName").style.display=authMode==="signup"?"block":"none";
+  $("#authLegal").style.display=authMode==="signup"?"flex":"none";
   $("#authSubmit").textContent=authMode==="login"?"Se connecter":"Créer mon compte";
   $("#authErr").textContent="";
 }
@@ -488,16 +655,19 @@ function authSubmit(){
   if(pwd.length<4){err.textContent="Mot de passe : 4 caractères minimum.";return;}
   if(authMode==="signup"){
     if(!name){err.textContent="Indique ton prénom.";return;}
+    if(!$("#legalChk").checked){err.textContent="Coche la case pour continuer.";return;}
     if(A.users[email]){err.textContent="Ce compte existe déjà — connecte-toi.";return;}
-    A.users[email]={name,email,pwd,plan:"free"};A.current=email;saveAuth();enterApp(true);
+    A.users[email]={name,email,pwd,plan:"free",onboarded:false,profile:null};A.current=email;saveAuth();
+    $("#auth").classList.add("hidden");startOnboarding();
   }else{
     const u=A.users[email];
     if(!u||u.pwd!==pwd){err.textContent="Identifiants incorrects.";return;}
-    A.current=email;saveAuth();enterApp(true);
+    A.current=email;saveAuth();$("#auth").classList.add("hidden");
+    if(!u.onboarded){startOnboarding();}else{enterApp(true);}
   }
 }
-function enterApp(greet){$("#auth").classList.add("hidden");applyTheme();applyPlan();renderAll();if(greet){const u=currentUser();toast("Salut "+(u?u.name:""));}}
-function logout(){authMode="login";A.current=null;saveAuth();closeSheet();["authEmail","authPwd","authNameInp"].forEach(i=>{const e=$("#"+i);if(e)e.value="";});showAuth();}
+function enterApp(greet){$("#auth").classList.add("hidden");$("#onboard").classList.add("hidden");applyTheme();applyPlan();renderAll();if(greet){const u=currentUser();toast("Content de te revoir, "+(u?u.name:"")+".");}}
+function logout(){A.current=null;saveAuth();closeSheet();authMode="login";["authEmail","authPwd","authNameInp"].forEach(i=>{const e=$("#"+i);if(e)e.value="";});const lc=$("#legalChk");if(lc)lc.checked=false;showAuth();}
 function applyPlan(){
   const pro=isPro();
   document.documentElement.dataset.plan=pro?"pro":"free";
@@ -508,6 +678,65 @@ function applyPlan(){
   if(!pro&&fDur===45)setDur(25);
 }
 
+/* ---------- onboarding (mini-profilage) ---------- */
+const LIKERT=["Jamais","Rarement","Parfois","Souvent","Toujours"];
+const MODULES=[
+  {key:"att",emoji:"\ud83c\udfaf",title:"Attention",sub:"Comment ton attention fonctionne au quotidien.",qs:["Tu perds le fil d'une t\u00e2che en cours de route","Tu te laisses distraire par un bruit, une notif, une pens\u00e9e","Tu commences plein de choses sans les finir","Tu relis plusieurs fois la m\u00eame phrase sans l'enregistrer","Tu oublies pourquoi tu es entr\u00e9\u00b7e dans une pi\u00e8ce","Tu zappes des rendez-vous ou des \u00e9ch\u00e9ances","Une t\u00e2che ennuyeuse te demande un effort \u00e9norme","Ton esprit part ailleurs pendant une conversation"]},
+  {key:"imp",emoji:"\u26a1",title:"\u00c9nergie & impulsivit\u00e9",sub:"Ton rapport \u00e0 l'\u00e9lan et \u00e0 la nouveaut\u00e9.",qs:["Tu parles ou agis avant d'avoir r\u00e9fl\u00e9chi","Tu coupes la parole sans le vouloir","Tu as du mal \u00e0 attendre (file, r\u00e9ponse, ton tour)","Tu passes d'une id\u00e9e \u00e0 une autre tr\u00e8s vite","Tu fais des achats impulsifs","Tu ressens un besoin de bouger, de stimulation","Tu t'ennuies vite et cherches de la nouveaut\u00e9","Tu prends des d\u00e9cisions sur un coup de t\u00eate"]},
+  {key:"quo",emoji:"\ud83e\uddf0",title:"Organisation",sub:"Le passage \u00e0 l'action au quotidien.",qs:["Une pile de choses \u00e0 faire te fige sur place","Tu remets au lendemain m\u00eame les petites t\u00e2ches","Tu as du mal \u00e0 estimer le temps que prend une t\u00e2che","Le rangement / l'administratif s'accumulent","Tu cherches souvent tes affaires (cl\u00e9s, papiers)","D\u00e9marrer est plus dur que de continuer","Tu fonctionnes par \u00e0-coups : rien, puis tout d'un coup"]},
+  {key:"emo",emoji:"\ud83c\udf0a",title:"\u00c9motions",sub:"Comment tu vis et r\u00e9gules tes \u00e9motions.",qs:["Tes \u00e9motions montent vite et fort","Quand on te critique, tu le vis tr\u00e8s mal","Un rejet ou un silence te blesse intens\u00e9ment","Tu rumines longtemps une remarque n\u00e9gative","Tu passes du haut au bas rapidement dans la journ\u00e9e","Tu te juges durement quand tu rates quelque chose","La frustration te submerge vite","Tu as besoin de te sentir valid\u00e9\u00b7e par les autres"]},
+  {key:"tsa",emoji:"\ud83e\udde9",title:"Sensorialit\u00e9",sub:"Optionnel \u2014 sensorialit\u00e9 et besoin de cadre.",qs:["Les bruits, lumi\u00e8res ou textures te g\u00eanent fortement","Les impr\u00e9vus / changements de plan te d\u00e9stabilisent","Tu as besoin de routines pr\u00e9cises pour te sentir bien","Les codes sociaux implicites te demandent un effort","Tu peux te concentrer intens\u00e9ment sur un sujet de passion","Les foules ou le contact visuel te co\u00fbtent de l'\u00e9nergie"]},
+  {key:"som",emoji:"\ud83c\udf19",title:"Sommeil",sub:"Ton horloge interne.",qs:["Tu as du mal \u00e0 t'endormir, l'esprit qui tourne","Tu es plus actif\u00b7ve et cr\u00e9atif\u00b7ve le soir / la nuit","Te lever le matin est difficile","Tu repousses l'heure du coucher (scroll, s\u00e9ries)","Tu te sens en d\u00e9calage avec les horaires \u00ab normaux \u00bb"]},
+  {key:"fct",emoji:"\ud83d\udd0b",title:"Au quotidien",sub:"L'effort que \u00e7a te demande de tenir.",qs:["Tu te sens d\u00e9bord\u00e9\u00b7e par la charge mentale","Tu oublies de manger, boire ou faire des pauses","Tenir un budget / tes finances te stresse","Tu te compares aux autres et te trouves \u00ab en retard \u00bb","Tu caches tes difficult\u00e9s aux autres (masking)","Tu finis tes journ\u00e9es \u00e9puis\u00e9\u00b7e par l'effort d'organisation"]}
+];
+const ARCHE={
+  att:{nom:"L'Esprit Vagabond",emoji:"\ud83c\udf0c",couleur:"#6B5BD0",code:"Attention flottante",desc:"Ton esprit voyage vite et loin. Plein d'id\u00e9es, mais le fil se perd. Phare te ram\u00e8ne \u00e0 une seule chose \u00e0 la fois."},
+  imp:{nom:"La Com\u00e8te",emoji:"\u2604\ufe0f",couleur:"#E2912F",code:"\u00c9nergie & impulsivit\u00e9",desc:"Tu fonces, tu cr\u00e9es, tu br\u00fbles vite. Ton d\u00e9fi : canaliser l'\u00e9lan sans t'\u00e9parpiller. Phare te donne un cap."},
+  quo:{nom:"L'\u00c9quilibriste",emoji:"\ud83c\udfaa",couleur:"#0F8170",code:"Organisation au quotidien",desc:"Tu jongles avec tout, et d\u00e9marrer est le plus dur. Phare casse chaque chose en pas ridiculement petits."},
+  emo:{nom:"Le C\u0153ur \u00e0 Vif",emoji:"\ud83d\udc97",couleur:"#C85A6E",code:"\u00c9motions intenses",desc:"Tu ressens tout, fort. Critiques et rejets piquent profond. Phare te parle avec douceur et garde le SOS \u00e0 port\u00e9e."},
+  som:{nom:"Le Veilleur",emoji:"\ud83c\udf19",couleur:"#3B4A8C",code:"Chronotype d\u00e9cal\u00e9",desc:"Ton heure de gloire, c'est le soir. Phare s'adapte \u00e0 ton rythme plut\u00f4t que l'inverse."}
+};
+let onb={view:"welcome",modIdx:0,ans:{}};
+function startOnboarding(){onb={view:"welcome",modIdx:0,ans:{}};$("#onboard").classList.remove("hidden");renderOnb();}
+function onbProg(){const total=MODULES.length+2;let idx=0;if(onb.view==="welcome")idx=0;else if(onb.view==="result")idx=total-1;else idx=onb.modIdx+1;return Array.from({length:total},(_,k)=>`<i class="${k<=idx?'on':''}"></i>`).join("");}
+function meanOf(k){const a=onb.ans[k]||[];const v=a.filter(x=>x!=null&&x!==undefined);return v.length?v.reduce((s,x)=>s+x,0)/v.length:0;}
+function hasAnyAnswer(){return Object.values(onb.ans).some(a=>a&&a.some(x=>x!=null));}
+function computeProfile(){
+  const sc={};MODULES.forEach(m=>sc[m.key]=meanOf(m.key));
+  const main=["emo","imp","att","quo","som"];
+  let best=main[0];main.forEach(k=>{if(sc[k]>sc[best])best=k;});
+  const arche={...ARCHE[best]};
+  if(sc.tsa>=2.5)arche.desc+=" Traits sensoriels marqu\u00e9s : tu as besoin de cadre et de calme.";
+  const act={sosVisible:true,oneStepMode:sc.att>=2||sc.quo>=2||sc.fct>=2.5,rsdMode:sc.emo>=2.3,lateChronotype:sc.som>=2.5,tsaMode:sc.tsa>=2.5,emoFocus:sc.emo>=2};
+  return{answers:onb.ans,scores:sc,archetype:arche,activations:act,rituals:true,tone:act.rsdMode?"doux":"normal"};
+}
+function renderOnb(){
+  const u=currentUser(),name=u?u.name:"";const card=$("#onbCard");const prog=onbProg();
+  if(onb.view==="welcome"){
+    card.innerHTML=`<div class="onb-prog">${prog}</div><div class="onb-emoji">\u2693</div><h2>Bonjour ${esc(name)}.</h2><p class="lead">On va faire un petit profilage \u2014 environ 50 questions, par petits blocs. \u00c7a r\u00e8gle Phare pour ton cerveau \u00e0 toi. Aucune mauvaise r\u00e9ponse, et tu peux passer quand tu veux.</p><button class="btn btn-go btn-block" data-action="onb-next">Commencer le profilage</button><button class="onb-skip" data-action="onb-skip">Passer, j'irai direct \u00e0 l'app</button>`;
+  } else if(onb.view==="result"){
+    onb.profile=computeProfile();const a=onb.profile.archetype,act=onb.profile.activations;
+    const acts=[act.sosVisible&&"Bouton SOS toujours accessible",act.oneStepMode&&"Une seule \u00e9tape \u00e0 la fois",act.rsdMode&&"Ton ultra-bienveillant (RSD)",act.lateChronotype&&"Rythme du soir respect\u00e9",act.tsaMode&&"Communication explicite, cadre clair","Rituels matin & soir"].filter(Boolean);
+    card.innerHTML=`<div class="onb-prog">${prog}</div><div class="prof-wrap" style="margin:0 auto"><div class="arche" style="background:${a.couleur}"><div class="ae">${a.emoji}</div><h2>${esc(a.nom)}</h2><div class="code">${esc(a.code)}</div></div><p style="font-size:.95rem;line-height:1.6;text-align:center;margin:0 0 18px">${esc(a.desc)}</p><div class="card" style="margin-bottom:18px"><div class="eyebrow">Phare est r\u00e9gl\u00e9 pour toi</div><ul style="margin:0;padding-left:18px;line-height:1.8;font-size:.9rem;color:var(--ink-soft)">${acts.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><button class="btn btn-go btn-block" data-action="onb-finish">Entrer dans Phare</button></div>`;
+  } else {
+    const m=MODULES[onb.modIdx];const ans=onb.ans[m.key]||[];const last=onb.modIdx===MODULES.length-1;
+    card.innerHTML=`<div class="onb-prog">${prog}</div><div class="prof-wrap" style="margin:0 auto"><div class="onb-emoji" style="text-align:left">${m.emoji}</div><div class="prof-modhead">${esc(m.title)}</div><div class="prof-modsub">${esc(m.sub)} <span style="color:var(--ink-faint)">(${onb.modIdx+1}/${MODULES.length})</span></div>${m.qs.map((q,qi)=>`<div class="prof-q"><div class="q">${esc(q)}</div><div class="likert">${LIKERT.map((lab,v)=>`<button class="${ans[qi]===v?'on':''}" data-action="onb-like" data-m="${m.key}" data-i="${qi}" data-v="${v}">${lab}</button>`).join("")}</div></div>`).join("")}<button class="btn btn-go btn-block" data-action="onb-next">${last?"Voir mon profil":"Continuer"}</button><button class="onb-skip" data-action="onb-skip">Passer le profilage</button></div>`;
+  }
+}
+function setLike(mk,qi,v){onb.ans[mk]=onb.ans[mk]||[];onb.ans[mk][qi]=v;renderOnb();}
+function onbNext(){if(onb.view==="welcome"){onb.view="module";onb.modIdx=0;}else if(onb.view==="module"){if(onb.modIdx<MODULES.length-1)onb.modIdx++;else onb.view="result";}renderOnb();$("#onboard").scrollTop=0;}
+function finishOnboarding(skip){const u=currentUser();let prof;if(skip||!hasAnyAnswer()){prof={answers:{},scores:{},archetype:null,activations:{sosVisible:true,oneStepMode:true},rituals:true,tone:"normal"};}else{prof=onb.profile||computeProfile();}if(u){u.onboarded=true;u.profile=prof;saveAuth();}enterApp(true);}
+
+/* ---------- legal ---------- */
+const LEGAL_PAGES={
+  disclaimer:{t:"Santé",h:`<div class="legal-box" style="margin-top:4px"><b>⚠️ Phare n'est pas un dispositif médical.</b><br>C'est un outil d'auto-organisation et de bien-être. Il ne remplace ni un diagnostic, ni un traitement, ni l'avis d'un professionnel de santé.</div><div class="legal-body"><p>Si tu rencontres une détresse psychologique, un mal-être profond ou des pensées sombres, parle à un professionnel de santé.</p><p><b>Urgence / écoute, gratuit 24h/24 :</b><br>· 3114 — Suicide écoute<br>· 15 — SAMU · 112 — urgences<br>· 3919 — violences</p></div>`},
+  mentions:{t:"Mentions",h:`<div class="legal-body"><h4>Éditeur</h4><p>Application éditée par [Nom / statut — à compléter], SIREN [—]. Directeur de la publication : [—].</p><h4>Hébergement</h4><p>Site hébergé par l'hébergeur statique choisi au déploiement (ex. Netlify, Inc. ou GitHub Pages), via HTTPS.</p><h4>Contact</h4><p>[email de contact à compléter]</p></div>`},
+  cgu:{t:"CGU",h:`<div class="legal-body"><h4>Objet</h4><p>Phare est un outil d'organisation et de soutien au quotidien. Son usage est personnel.</p><h4>Accès & tarifs</h4><p>L'essentiel est gratuit. Une offre Pro optionnelle (9,99 €/mois) débloque des fonctions de confort. Résiliable à tout moment.</p><h4>Responsabilité</h4><p>Phare est fourni « en l'état », sans garantie de résultat. Il ne constitue pas un soin ni un conseil médical, juridique ou financier. Tu restes seul·e responsable de tes décisions.</p><h4>Propriété</h4><p>Les contenus et le code restent la propriété de leur éditeur. Reproduction interdite sans autorisation.</p></div>`},
+  privacy:{t:"Confidentialité",h:`<div class="legal-body"><h4>Données collectées</h4><p>Aucune donnée n'est envoyée à un serveur. Tout (tâches, humeurs, finances, contacts, profil) est stocké <b>localement sur ton appareil</b> via le stockage du navigateur.</p><h4>Conséquence</h4><p>L'éditeur n'a accès à aucune de tes données et n'en fait aucun usage. Pas de profilage publicitaire, pas de revente.</p><h4>Tes droits (RGPD)</h4><p>Accès, rectification et effacement : tu maîtrises tout depuis l'app (bouton « Réinitialiser ») ou en vidant le cache du navigateur. Pour toute question : [email de contact].</p></div>`},
+  cookies:{t:"Cookies",h:`<div class="legal-body"><h4>Traceurs</h4><p>Phare n'utilise <b>aucun cookie tiers ni traceur publicitaire</b>.</p><h4>Stockage technique</h4><p>Seul le stockage local (localStorage) est utilisé, strictement nécessaire au fonctionnement (sauvegarde de tes données sur l'appareil). À ce titre, il ne requiert pas de consentement préalable.</p></div>`}
+};
+function legalSheet(tab){tab=tab||"disclaimer";const order=["disclaimer","mentions","cgu","privacy","cookies"];openSheet(`<h2>Mentions & conditions</h2><div class="legal-tabs">${order.map(k=>`<button class="${k===tab?'on':''}" data-action="legal-tab" data-t="${k}">${LEGAL_PAGES[k].t}</button>`).join("")}</div>${LEGAL_PAGES[tab].h}<button class="btn btn-go btn-block" style="margin-top:18px" data-action="sheet-close">Fermer</button>`);}
+
 /* ---------- progression ---------- */
 function lvlOf(xp){return Math.floor(xp/100)+1;}
 function awardXP(n){S.xp+=n;const t=todayStr();if(S.lastActive!==t){const y=new Date(Date.now()-864e5).toISOString().slice(0,10);S.streak=(S.lastActive===y)?S.streak+1:1;S.lastActive=t;}S.days[t]=true;save();}
@@ -516,24 +745,204 @@ function awardXP(n){S.xp+=n;const t=todayStr();if(S.lastActive!==t){const y=new 
 function activeTasks(){return S.tasks.filter(t=>!t.done&&!t.inbox).sort((a,b)=>(a.prio-b.prio)||(a.created-b.created));}
 function nextAction(){const l=activeTasks();if(!l.length)return null;const t=l[0];const step=(t.steps||[]).find(s=>!s.done);return{task:t,step:step||null};}
 
-/* ---------- helpers ---------- */
-function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+/* ---------- generic helpers ---------- */
 function prioLbl(p){return ["","Urgent","Important","Normal","Un jour"][p];}
 function lastNDates(n){const a=[];for(let i=n-1;i>=0;i--)a.push(new Date(Date.now()-i*864e5).toISOString().slice(0,10));return a;}
-function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove("show"),1900);}
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove("show"),2300);}
 function getCSS(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
 function celebrate(){const cols=[getCSS("--accent"),getCSS("--primary"),getCSS("--success"),getCSS("--play")];for(let i=0;i<26;i++){const c=document.createElement("div");c.className="confetti";c.style.left=Math.random()*100+"vw";c.style.background=cols[i%cols.length];c.style.animation=`drop ${0.9+Math.random()*0.8}s cubic-bezier(.3,.7,.5,1) ${Math.random()*0.2}s forwards`;document.body.appendChild(c);setTimeout(()=>c.remove(),2000);}}
 function lockBlock(){return `<div class="lockwrap"><div class="lock-content"><div style="height:46px;border:1px solid var(--line);border-radius:12px;background:var(--surface)"></div></div><div class="lock-ov" data-action="paywall"><span class="lock-badge">🔒 Pro</span><button class="btn btn-go btn-sm" data-action="paywall">Débloquer · 9,99€/mois</button></div></div>`;}
+
+/* ---------- mood / comment ça va ---------- */
+const MOODS=[
+  {v:"calm",e:"😌",l:"Calme",neg:false},{v:"good",e:"😊",l:"Bien",neg:false},
+  {v:"ok",e:"🙂",l:"Ça va",neg:false},{v:"tired",e:"😴",l:"Fatigué·e",neg:true},
+  {v:"stressed",e:"😰",l:"Stressé·e",neg:true},{v:"sad",e:"😔",l:"Triste",neg:true},
+  {v:"overwhelmed",e:"🌪",l:"Submergé·e",neg:true},{v:"irritated",e:"😤",l:"Irrité·e",neg:true}
+];
+const MOOD_REPLY={
+  calm:"Bien. Profite de ce calme pour avancer une petite chose, sans forcer.",
+  good:"Content pour toi. Capitalise : attaque la tâche qui compte tant que l'énergie est là.",
+  ok:"Noté. \"Ça va\" est un point de départ tout à fait correct.",
+  tired:"Repéré. Énergie basse = pas de culpabilité. Une micro-action douce suffit aujourd'hui.",
+  stressed:"Je t'entends. Le stress brouille tout. Une minute de respiration peut aider.",
+  sad:"Merci de l'avoir posé. C'est ok de ne pas aller bien. Sois doux avec toi.",
+  overwhelmed:"Trop, c'est trop. On réduit : une seule chose, la plus petite. Ou prends une pause.",
+  irritated:"L'irritation est un signal. Respire un coup avant de décider quoi que ce soit."
+};
+function saveMood(v){
+  const m=MOODS.find(x=>x.v===v);if(!m)return;
+  S.moods.unshift({mood:v,emoji:m.e,label:m.l,neg:m.neg,ts:new Date().toISOString()});save();
+  renderMoodGrid();
+  const r=$("#moodReply");let html=esc(MOOD_REPLY[v]||"");
+  if(m.neg)html+=` <button class="btn btn-calm btn-sm" style="margin-top:10px;width:auto;flex:none" data-action="sos-breath">Respirer 1 min</button>`;
+  r.innerHTML=html;r.classList.add("show");
+}
+function renderMoodGrid(){const today=todayStr();const cur=(S.moods[0]&&S.moods[0].ts.slice(0,10)===today)?S.moods[0].mood:null;$("#moodGrid").innerHTML=MOODS.map(m=>`<button class="mood-opt ${cur===m.v?'on':''}" data-action="mood-pick" data-v="${m.v}"><span class="me">${m.e}</span><span>${esc(m.l)}</span></button>`).join("");}
+function renderMoodHistory(){const el=$("#moodHistory");if(!el)return;if(!S.moods.length){el.innerHTML=`<p style="font-size:.86rem;color:var(--ink-faint);margin:0">Aucun check-in encore. Pose comment tu te sens, c'est 5 secondes.</p>`;return;}el.innerHTML=S.moods.slice(0,8).map(m=>`<div class="mlog"><span class="me">${m.emoji}</span><div class="ml-l"><b>${esc(m.label)}</b><span>${new Date(m.ts).toLocaleString("fr-FR",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}</span></div></div>`).join("");}
+function renderMoodPatterns(){const el=$("#moodPatterns");if(!el)return;const wk=lastNDates(7);const recent=S.moods.filter(m=>wk.includes(m.ts.slice(0,10)));if(!recent.length){el.innerHTML=`<p style="font-size:.86rem;color:var(--ink-faint);margin:0">Pas encore assez de données cette semaine.</p>`;return;}const counts={};recent.forEach(m=>{counts[m.mood]=(counts[m.mood]||0)+1;});const top=Object.entries(counts).sort((a,b)=>b[1]-a[1]);const negCount=recent.filter(m=>m.neg).length;const negPct=Math.round(negCount/recent.length*100);const topM=MOODS.find(x=>x.v===top[0][0]);el.innerHTML=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><span style="font-size:2rem">${topM.e}</span><div><div style="font-weight:700">Dominante : ${esc(topM.l)}</div><div style="font-size:.8rem;color:var(--ink-faint)">${recent.length} check-ins · ${negPct}% de moments difficiles</div></div></div>`+top.map(([v,c])=>{const mm=MOODS.find(x=>x.v===v);const pct=Math.round(c/recent.length*100);return `<div style="display:flex;align-items:center;gap:9px;margin-bottom:7px"><span style="width:24px;font-size:1.1rem">${mm.e}</span><div style="flex:1;height:9px;background:var(--surface-2);border-radius:5px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${mm.neg?'var(--play)':'var(--primary)'};border-radius:5px"></div></div><span style="width:30px;text-align:right;font-size:.74rem;color:var(--ink-soft)">${c}</span></div>`;}).join("");}
+
+/* ---------- rituals ---------- */
+function ritualKindNow(){const h=new Date().getHours();if(h>=5&&h<12)return"morning";if(h>=17&&h<23)return"evening";return null;}
+function renderRitualSlot(){const slot=$("#ritualSlot");if(!slot)return;const kind=ritualKindNow();const u=currentUser();const wantR=!u||!u.profile||u.profile.rituals!==false;if(!kind||!wantR){slot.innerHTML="";return;}const t=todayStr();const done=(S.ritualLog[t]&&S.ritualLog[t][kind]);const info=kind==="morning"?{e:"🌅",ttl:"Rituel du matin",sub:"15 min pour démarrer doucement."}:{e:"🌙",ttl:"Rituel du soir",sub:"5 min pour fermer la journée."};slot.innerHTML=`<div class="card ritual-card" data-action="ritual-open" data-kind="${kind}"><div style="display:flex;align-items:center;gap:13px"><span class="rc-emoji">${info.e}</span><div style="flex:1"><div style="font-family:'Fraunces',serif;font-size:1.15rem">${info.ttl}</div><div style="font-size:.82rem;color:var(--ink-soft)">${done?"✓ Fait aujourd'hui — rouvrir":info.sub}</div></div><span style="color:var(--ink-faint);font-size:1.3rem">›</span></div></div>`;}
+function ritualSheet(kind){
+  const t=todayStr();
+  if(kind==="morning"){
+    openSheet(`<h2>Rituel du matin</h2><p style="color:var(--ink-faint);font-size:.85rem">Une étape à la fois. Rien d'obligatoire.</p>
+      <div class="card" style="margin-top:14px"><div style="font-weight:700">1 · Un verre d'eau</div><p style="font-size:.86rem;color:var(--ink-soft);margin:4px 0 0">Avant tout. Pose ton téléphone le temps de le boire.</p></div>
+      <div class="card"><div style="font-weight:700">2 · Bouger 3 minutes</div><p style="font-size:.86rem;color:var(--ink-soft);margin:4px 0 0">Étirements, marche, danse. Peu importe, mais bouge.</p></div>
+      <div class="card"><div style="font-weight:700">3 · LA chose du jour</div><p style="font-size:.86rem;color:var(--ink-soft);margin:4px 0 0">${S.energy.level==='basse'?"Aujourd'hui : 1 seule chose importante. C'est tout.":"Quelle est LA chose qui compte aujourd'hui ?"}</p></div>
+      <button class="btn btn-go btn-block" style="margin-top:8px" data-action="ritual-done" data-kind="morning">C'est suffisant. Bonne journée.</button>`);
+  } else {
+    const wins=S.tasks.filter(t=>t.done).slice(-5).reverse();
+    openSheet(`<h2>Rituel du soir</h2><p style="color:var(--ink-faint);font-size:.85rem">Cinq minutes pour poser la journée.</p>
+      <div class="card" style="margin-top:14px"><div style="font-weight:700">Tes victoires du jour</div>${wins.length?`<ul style="margin:8px 0 0;padding-left:18px;line-height:1.7;font-size:.9rem;color:var(--ink-soft)">${wins.map(w=>`<li>${esc(w.ttl)}</li>`).join("")}</ul>`:`<p style="font-size:.86rem;color:var(--ink-soft);margin:4px 0 0">Tu as traversé la journée. C'est déjà une victoire.</p>`}</div>
+      <div class="card"><div style="font-weight:700">Une chose pour demain</div><p style="font-size:.86rem;color:var(--ink-soft);margin:4px 0 8px">Quelque chose t'inquiète pour demain ? Pose-le, ta tête sera libre.</p><button class="btn btn-ghost btn-block btn-sm" data-action="capture-open">Vider ma tête</button></div>
+      <button class="btn btn-go btn-block" style="margin-top:8px" data-action="ritual-done" data-kind="evening">La journée est finie. Je peux poser.</button>`);
+  }
+}
+
+/* ---------- scripts (messages difficiles) ---------- */
+const SCRIPTS=[
+  {t:"Relance impayé (ferme mais respectueux)",b:"Bonjour [Prénom],\n\nJe reviens vers vous concernant la facture n°[X] du [date], d'un montant de [montant]€, dont l'échéance était le [échéance].\n\nMerci de me confirmer la date de règlement prévue. Si une difficulté est survenue, on peut en discuter.\n\nCordialement,\n[Toi]"},
+  {t:"Annoncer une hausse de tarifs",b:"Bonjour [Prénom],\n\nPour information, mes tarifs évoluent à compter du [date]. La nouvelle grille est en pièce jointe.\n\nLes contrats en cours restent au tarif actuel jusqu'à leur terme. Je reste dispo pour toute question.\n\nÀ bientôt,\n[Toi]"},
+  {t:"Dire non sans se justifier",b:"Merci pour ta proposition. Je ne pourrai pas être disponible pour ce projet.\n\nJe te souhaite une belle continuation.\n\n[Toi]"},
+  {t:"Répondre à un client difficile",b:"Bonjour [Prénom],\n\nJe comprends ta frustration. Pour qu'on avance, peux-tu me préciser :\n- ce qui ne va pas concrètement,\n- ce que tu attends comme résolution.\n\nJe reviens vers toi avec une proposition sous 24h.\n\nCordialement,\n[Toi]"}
+];
+function scriptsSheet(){openSheet(`<h2>Messages difficiles</h2><p style="color:var(--ink-faint);font-size:.85rem">Des scripts prêts. Copie, adapte, envoie.</p>${SCRIPTS.map((s,i)=>`<div class="card" style="margin-top:14px"><div style="font-weight:700;margin-bottom:10px">${esc(s.t)}</div><div class="script-pre">${esc(s.b)}</div><button class="btn btn-ghost btn-sm" data-action="script-copy" data-i="${i}">Copier</button></div>`).join("")}`);}
+
+/* ---------- SOS ---------- */
+let sosView="menu", breathTimer=null, breathPhase=0, breathCycle=0;
+const EMERGENCY=[["SAMU","15"],["Pompiers","18"],["Police","17"],["Urgence (Europe)","112"],["Urgence sourds (SMS)","114"],["Suicide écoute","3114"],["Violences femmes","3919"]];
+function openSOS(){sosView="menu";clearInterval(breathTimer);$("#sos").classList.remove("hidden");renderSOS();}
+function closeSOS(){clearInterval(breathTimer);$("#sos").classList.add("hidden");}
+function renderSOS(){
+  const b=$("#sosBody");
+  if(sosView==="menu"){
+    b.innerHTML=`<div class="sos-head"><div class="se">🌬</div><h2>Respire. Ça va passer.</h2><p>Tu n'as pas besoin de tout régler maintenant. Choisis une option.</p></div>
+      <button class="sos-opt" data-action="sos-tech" data-t="breath"><span class="so-e">🌬</span><div><b>Respiration 4-7-8</b><span>Inspire 4s, retiens 7s, expire 8s. Guidé.</span></div></button>
+      <button class="sos-opt" data-action="sos-tech" data-t="anchor"><span class="so-e">🧊</span><div><b>Ancrage 5-4-3-2-1</b><span>Reviens dans ton corps avec tes sens.</span></div></button>
+      <button class="sos-opt" data-action="sos-tech" data-t="call"><span class="so-e">📞</span><div><b>Appeler un proche</b><span>Tu n'as pas à porter ça seul·e.</span></div></button>
+      <button class="sos-opt" data-action="sos-tech" data-t="numbers"><span class="so-e">🆘</span><div><b>Numéros d'urgence</b><span>SAMU 15 · 3114 · 3919 — 24h/24, gratuits.</span></div></button>
+      <div style="text-align:center"><button class="sos-close" data-action="sos-close">Fermer</button></div>`;
+  } else if(sosView==="breath"){
+    b.innerHTML=`<div class="breath-stage"><div class="breath-orb" id="breathOrb"></div><div class="breath-phase" id="breathPhase">Prépare-toi…</div><div class="breath-count" id="breathCount">3</div><div class="breath-cycle" id="breathCycle"></div></div><div style="text-align:center;margin-top:20px"><button class="sos-close" data-action="sos-back">← Retour</button></div>`;
+    startBreath();
+  } else if(sosView==="anchor"){
+    renderAnchor(0);
+  } else if(sosView==="call"){
+    const c=S.trustedContacts||[];
+    b.innerHTML=`<div class="sos-head"><div class="se">📞</div><h2>Appelle quelqu'un</h2><p>Une voix qui te connaît, ça change tout.</p></div>`+
+      (c.length?`<div class="tel-list">${c.map(x=>`<a href="tel:${esc(x.phone)}"><span>${esc(x.name)}</span><span class="num">${esc(x.phone)}</span></a>`).join("")}</div>`:`<p style="text-align:center;color:var(--ink-soft);font-size:.9rem;line-height:1.5;margin-bottom:16px">Tu n'as pas encore de contact de confiance.<br>Ajoute-en dans <b>Moi</b> pour les retrouver ici.</p><button class="btn btn-ghost btn-block" data-action="sos-to-contacts">Ajouter un contact</button>`)+
+      `<div style="text-align:center"><button class="sos-close" data-action="sos-back">← Retour</button></div>`;
+  } else if(sosView==="numbers"){
+    b.innerHTML=`<div class="sos-head"><div class="se">🆘</div><h2>Numéros d'urgence</h2><p>Gratuits, 24h/24. Tu peux appeler maintenant.</p></div><div class="tel-list">${EMERGENCY.map(n=>`<a href="tel:${n[1]}"><span>${esc(n[0])}</span><span class="num">${n[1]}</span></a>`).join("")}</div><div class="note" style="text-align:center">Si tu penses à te faire du mal, appelle le <b>3114</b>. C'est gratuit, confidentiel, 24h/24.</div><div style="text-align:center"><button class="sos-close" data-action="sos-back">← Retour</button></div>`;
+  }
+}
+const BREATH=[["Inspire",4],["Retiens",7],["Expire",8]];
+function startBreath(){
+  breathPhase=0;breathCycle=1;clearInterval(breathTimer);
+  const orb=$("#breathOrb");let count=3,phaseMode=-1;
+  $("#breathPhase").textContent="Prépare-toi…";$("#breathCount").textContent=count;$("#breathCycle").textContent="";
+  breathTimer=setInterval(()=>{
+    count--;
+    if(count<0){
+      phaseMode++;
+      if(phaseMode>0)breathPhase++;
+      if(breathPhase>=BREATH.length){breathPhase=0;breathCycle++;}
+      if(breathCycle>4){clearInterval(breathTimer);if($("#breathPhase")){$("#breathPhase").textContent="Voilà.";$("#breathCount").textContent="✓";$("#breathCycle").textContent="Tu es revenu·e. Doucement.";}return;}
+      const ph=BREATH[breathPhase];count=ph[1];
+      const pe=$("#breathPhase"),pc=$("#breathCycle");if(!pe)return;
+      pe.textContent=ph[0];if(pc)pc.textContent=`Cycle ${breathCycle} / 4`;
+      if(orb){if(ph[0]==="Inspire"){orb.style.transitionDuration=ph[1]+"s";orb.style.transform="scale(1)";}else if(ph[0]==="Expire"){orb.style.transitionDuration=ph[1]+"s";orb.style.transform="scale(.55)";}}
+    }
+    const cc=$("#breathCount");if(cc)cc.textContent=count>=0?count:0;
+  },1000);
+}
+const ANCHOR=[["👀","5 choses","Nomme 5 choses que tu vois autour de toi."],["👂","4 choses","Nomme 4 choses que tu entends."],["✋","3 choses","Nomme 3 choses que tu touches."],["👃","2 choses","Nomme 2 choses que tu sens."],["👅","1 chose","Nomme 1 chose que tu goûtes."]];
+function renderAnchor(i){const b=$("#sosBody");if(i>=ANCHOR.length){b.innerHTML=`<div class="sos-head"><div class="se">🧊</div><h2>Tu es revenu·e.</h2><p>Ton attention est dans le présent. Respire un coup.</p></div><button class="btn btn-go btn-block" data-action="sos-back">Retour</button>`;return;}const a=ANCHOR[i];b.innerHTML=`<div class="sos-head"><div class="se">${a[0]}</div><h2>${a[1]}</h2><p>${a[2]}</p></div><div class="breath-cycle" style="text-align:center;margin-bottom:18px">Étape ${i+1} / ${ANCHOR.length}</div><button class="btn btn-calm btn-block" data-action="anchor-next" data-i="${i+1}">Suivant</button><div style="text-align:center"><button class="sos-close" data-action="sos-back">← Retour</button></div>`;}
+
+/* ---------- voice ---------- */
+let activeRec=null;
+function voiceInput(sel,btn){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){toast("Dictée vocale indispo sur ce navigateur (essaie Chrome ou Safari).");return;}
+  if(activeRec){try{activeRec.stop();}catch(e){}return;}
+  const target=$(sel);if(!target)return;
+  const rec=new SR();rec.lang="fr-FR";rec.interimResults=false;rec.maxAlternatives=1;activeRec=rec;
+  if(btn)btn.classList.add("rec");
+  rec.onresult=e=>{const txt=Array.from(e.results).map(r=>r[0].transcript).join(" ");target.value=(target.value?target.value+" ":"")+txt;};
+  rec.onerror=()=>{toast("Je n'ai pas saisi. Réessaie.");};
+  rec.onend=()=>{if(btn)btn.classList.remove("rec");activeRec=null;target.focus();};
+  try{rec.start();}catch(e){activeRec=null;if(btn)btn.classList.remove("rec");}
+}
+
+/* ---------- categorize + gentle ---------- */
+function categorize(t){
+  const s=t.toLowerCase();
+  const has=(...k)=>k.some(w=>s.includes(w));
+  if(has("je me sens","j'ai peur","marre","fatigué","fatigue","triste","anxieu","angoiss","stress","déborde","submerg","seul","honte","colère","énerv","pleur","nul "))
+    return{cat:"emotion",gentle:"Merci de l'avoir posé. Une émotion nommée pèse déjà moins. Tu veux faire un check-in ?"};
+  if(has("appeler","rappeler","payer","facture","rdv","rendez-vous","envoyer","relancer","déclarer","réserver","acheter","mail","email","finir","rendre"))
+    return{cat:"tâche",gentle:"C'est noté comme tâche. Quand tu veux, découpe-la en un tout petit pas."};
+  if(has("idée","et si","peut-être","concept","pourrait","projet","envie de"))
+    return{cat:"idée",gentle:"Belle idée capturée. Elle est en sécurité, tu peux la lâcher."};
+  return{cat:"note",gentle:"Posé. C'est sorti de ta tête, c'est l'essentiel."};
+}
+
+/* ---------- contacts ---------- */
+function renderContacts(){const el=$("#contactList");if(!el)return;const c=S.trustedContacts||[];if(!c.length){el.innerHTML=`<p style="font-size:.84rem;color:var(--ink-faint);margin:0">Aucun contact pour l'instant.</p>`;return;}el.innerHTML=c.map(x=>`<div class="contact-item"><div class="ci-b"><b>${esc(x.name)}</b><span>${esc(x.phone)}</span></div><a href="tel:${esc(x.phone)}">Appeler</a><span class="x" style="color:var(--ink-faint);cursor:pointer;padding:6px;font-size:1.1rem" data-action="contact-del" data-id="${x.id}">×</span></div>`).join("");}
+
+/* ---------- Vie : Finances + Famille ---------- */
+let vieView="hub";
+const eur=n=>(Math.round(n)).toLocaleString("fr-FR")+" €";
+function finStatus(a){if(a.balance<a.red)return{c:"r",l:"Alerte"};if(a.balance<a.orange)return{c:"o",l:"Attention"};return{c:"g",l:"OK"};}
+function moneyTotal(){return (S.finances.accounts||[]).reduce((x,a)=>x+(+a.balance||0),0);}
+function evDateBox(iso){if(!iso)return '<b>—</b><span>plus tard</span>';const d=new Date(iso+"T00:00");if(isNaN(d))return '<b>—</b><span>—</span>';return `<b>${d.getDate()}</b><span>${d.toLocaleDateString("fr-FR",{month:"short"})}</span>`;}
+function renderVie(){
+  const el=$("#screen-vie");if(!el)return;
+  if(vieView==="finances"){
+    const accs=S.finances.accounts||[],ech=S.finances.echeances||[];const tot=moneyTotal();
+    el.innerHTML=`<div class="back-row"><button class="back-btn" data-action="vie-back">← Vie</button></div>
+      <div class="screen-head" style="margin-top:0">Finances</div>
+      <div class="screen-sub">Tes comptes et tes échéances, sans stress. Touche un solde pour le mettre à jour.</div>
+      <div class="card"><div class="eyebrow">Total disponible</div><div class="fin-tot ${tot<0?'neg':''}">${eur(tot)}</div></div>
+      <div class="card"><div class="eyebrow">Tes comptes</div>${accs.length?accs.map(a=>{const st=finStatus(a);return `<div class="acc"><span class="adot ${st.c}"></span><div class="a-b"><b>${esc(a.name)}</b><span>Seuils : ${eur(a.orange)} / ${eur(a.red)} · ${st.l}</span></div><span class="a-v ${a.balance<0?'neg':''}" data-action="fin-edit-acc" data-id="${a.id}" style="cursor:pointer">${eur(a.balance)}</span><span class="x" style="color:var(--ink-faint);cursor:pointer;padding:6px;font-size:1.05rem" data-action="fin-del-acc" data-id="${a.id}">×</span></div>`;}).join(""):`<p style="font-size:.85rem;color:var(--ink-faint);margin:0">Aucun compte.</p>`}
+        <button class="btn btn-ghost btn-block btn-sm" style="margin-top:12px" data-action="fin-add-acc">+ Ajouter un compte</button></div>
+      <div class="card"><div class="eyebrow">À venir</div>${ech.length?ech.map(e=>`<div class="acc"><div class="a-b"><b>${esc(e.label)}</b><span>${e.date?new Date(e.date+"T00:00").toLocaleDateString("fr-FR",{day:"2-digit",month:"long"}):"date non fixée"}</span></div><span class="a-v">${eur(e.amount)}</span><span class="x" style="color:var(--ink-faint);cursor:pointer;padding:6px;font-size:1.05rem" data-action="fin-del-ech" data-id="${e.id}">×</span></div>`).join(""):`<p style="font-size:.85rem;color:var(--ink-faint);margin:0">Aucune échéance.</p>`}
+        <button class="btn btn-ghost btn-block btn-sm" style="margin-top:12px" data-action="fin-add-ech">+ Ajouter une échéance</button></div>
+      <p class="note">Tout reste sur ton appareil. Aucune connexion bancaire, aucune donnée envoyée.</p>`;
+  } else if(vieView==="famille"){
+    const evs=(S.family.events||[]).slice().sort((a,b)=>(a.date||"9999").localeCompare(b.date||"9999"));
+    const load=S.family.load||[];const contacts=S.trustedContacts||[];
+    el.innerHTML=`<div class="back-row"><button class="back-btn" data-action="vie-back">← Vie</button></div>
+      <div class="screen-head" style="margin-top:0">Vie famille</div>
+      <div class="screen-sub">Les RDV et la charge mentale, posés une bonne fois. Plus besoin de tout retenir.</div>
+      <div class="card"><div class="eyebrow">Rendez-vous à venir</div>${evs.length?evs.map(e=>`<div class="ev"><div class="e-d">${evDateBox(e.date)}</div><div class="e-b"><b>${esc(e.title)}</b>${e.place?`<span>${esc(e.place)}</span>`:""}</div><span class="x" data-action="fam-del-ev" data-id="${e.id}">×</span></div>`).join(""):`<p style="font-size:.85rem;color:var(--ink-faint);margin:0">Aucun rendez-vous noté.</p>`}
+        <button class="btn btn-ghost btn-block btn-sm" style="margin-top:12px" data-action="fam-add-ev">+ Ajouter un rendez-vous</button></div>
+      <div class="card"><div class="eyebrow">Charge mentale</div>${load.length?load.map(l=>`<div class="load-item ${l.done?'done':''}"><div class="check ${l.done?'done':''}" data-action="fam-load-toggle" data-id="${l.id}">✓</div><div class="t">${esc(l.t)}</div><div class="x" style="color:var(--ink-faint);cursor:pointer;padding:4px;font-size:1.05rem" data-action="fam-del-load" data-id="${l.id}">×</div></div>`).join(""):`<p style="font-size:.85rem;color:var(--ink-faint);margin:0">Rien à porter pour l'instant.</p>`}
+        <div class="add-inline" style="margin-top:12px"><input id="famLoadInput" placeholder="Un truc à ne pas oublier…" maxlength="70"><button class="btn btn-go btn-sm" data-action="fam-add-load">+</button></div></div>
+      <div class="card"><div class="eyebrow">Contacts de confiance</div><p style="font-size:.82rem;color:var(--ink-faint);margin:-4px 0 10px">Aussi accessibles dans le SOS.</p>${contacts.length?contacts.map(x=>`<div class="contact-item"><div class="ci-b"><b>${esc(x.name)}</b><span>${esc(x.phone)}</span></div><a href="tel:${esc(x.phone)}">Appeler</a><span class="x" style="color:var(--ink-faint);cursor:pointer;padding:6px;font-size:1.1rem" data-action="contact-del" data-id="${x.id}">×</span></div>`).join(""):`<p style="font-size:.84rem;color:var(--ink-faint);margin:0">Aucun contact.</p>`}<button class="btn btn-ghost btn-block btn-sm" style="margin-top:10px" data-action="contact-add">+ Ajouter un contact</button></div>`;
+  } else {
+    const tot=moneyTotal();const worst=(S.finances.accounts||[]).map(finStatus).some(x=>x.c==="r")?"r":((S.finances.accounts||[]).map(finStatus).some(x=>x.c==="o")?"o":"g");
+    const nextEv=(S.family.events||[]).slice().sort((a,b)=>(a.date||"9999").localeCompare(b.date||"9999"))[0];
+    el.innerHTML=`<div class="screen-head">Ma vie</div><div class="screen-sub">Tout ce qui pèse côté argent et famille, à un seul endroit.</div>
+      <div class="card hub-card" data-action="vie-open" data-view="finances"><span class="he">💶</span><div class="hb"><b>Finances</b><span>${(S.finances.accounts||[]).length} compte(s) · ${eur(tot)} <span class="adot ${worst}" style="display:inline-block;vertical-align:middle;margin-left:4px"></span></span></div><span class="hc">›</span></div>
+      <div class="card hub-card" data-action="vie-open" data-view="famille"><span class="he">👨‍👩‍👧</span><div class="hb"><b>Vie famille</b><span>${nextEv?("Prochain : "+esc(nextEv.title)):((S.family.load||[]).filter(l=>!l.done).length+" chose(s) en tête")}</span></div><span class="hc">›</span></div>`;
+  }
+}
 
 /* ---------- renderers ---------- */
 function renderNow(){
   const hero=$("#nowHero"),na=nextAction();
   if(!na){hero.innerHTML=`<div class="now-label">Maintenant</div><div class="now-empty">Rien d'urgent.<br>Capture une pensée, ou prends une vraie pause — c'est permis.</div><div class="now-cta" style="margin-top:18px"><button class="btn btn-go" data-action="capture-open">Capturer une pensée</button></div>`;}
   else{const txt=na.step?na.step.t:na.task.ttl,ctx=na.step?na.task.ttl:null;hero.innerHTML=`<div class="now-label">Maintenant — une seule chose</div>${ctx?`<div class="now-ctx">Tâche : ${esc(ctx)}</div>`:""}<div class="now-action">${esc(txt)}</div><div class="now-cta"><button class="btn btn-go" data-action="now-done">C'est fait ✓</button><button class="btn btn-ghost" data-action="task-open" data-id="${na.task.id}">Trop dur ? Découper</button></div>`;}
+  renderRitualSlot();
   $$("#screen-now .eb").forEach(b=>b.classList.toggle("on",S.energy.date===todayStr()&&S.energy.level===b.dataset.level));
+  renderMoodGrid();
   const inbox=S.tasks.filter(t=>t.inbox&&!t.done);
   $("#inboxCount").textContent=inbox.length?inbox.length:"";
-  $("#inboxList").innerHTML=inbox.length?inbox.map(t=>`<div class="task p3" style="margin-bottom:8px;border-left-color:var(--ink-faint)"><div class="body" data-action="task-open" data-id="${t.id}"><div class="ttl">${esc(t.ttl)}</div></div><button class="btn btn-go btn-sm" data-action="inbox-keep" data-id="${t.id}">Garder</button></div>`).join(""):`<p style="color:var(--ink-faint);font-size:.88rem">Vide. La case mentale est libre.</p>`;
+  $("#inboxList").innerHTML=inbox.length?inbox.map(t=>`<div class="task p3" style="margin-bottom:8px;border-left-color:var(--ink-faint)"><div class="body" data-action="task-open" data-id="${t.id}"><div class="ttl">${esc(t.ttl)}</div>${t.cat?`<div class="meta"><span class="pill cat">${esc(t.cat)}</span></div>`:""}</div><button class="btn btn-go btn-sm" data-action="inbox-keep" data-id="${t.id}">Garder</button></div>`).join(""):`<p style="color:var(--ink-faint);font-size:.88rem">Vide. La case mentale est libre.</p>`;
   $("#routineList").innerHTML=S.routines.map(r=>`<div class="rt ${r.done?'done':''}"><div class="check ${r.done?'done':''}" data-action="routine-toggle" data-id="${r.id}">✓</div><div class="lbl">${esc(r.lbl)}</div><div class="x" data-action="routine-delete" data-id="${r.id}">×</div></div>`).join("");
 }
 function renderTasks(){
@@ -545,8 +954,8 @@ function renderTasks(){
 }
 function renderMenu(){const row=(arr,cat)=>arr.map((m,i)=>`<div class="mi"><span>${esc(m)}</span><span class="x" data-action="menu-delete" data-cat="${cat}" data-i="${i}">×</span></div>`).join("");$("#catApp").innerHTML=row(S.menu.app,"app");$("#catEnt").innerHTML=row(S.menu.ent,"ent");$("#catSide").innerHTML=row(S.menu.side,"side");}
 function renderFocusLog(){const wk=lastNDates(7),byDay={};S.focus.forEach(f=>{byDay[f.date]=(byDay[f.date]||0)+f.min;});const max=Math.max(60,...Object.values(byDay));$("#focusLog").innerHTML=wk.map(d=>{const m=byDay[d]||0,pct=Math.round(m/max*100),lab=new Date(d).toLocaleDateString("fr-FR",{weekday:"short"});return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="width:30px;font-size:.72rem;color:var(--ink-faint);text-transform:capitalize">${lab}</span><div style="flex:1;height:10px;background:var(--surface-2);border-radius:6px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--primary);border-radius:6px;transition:width .5s"></div></div><span style="width:46px;text-align:right;font-size:.74rem;color:var(--ink-soft)">${m} min</span></div>`;}).join("");}
-function renderMe(){const lvl=lvlOf(S.xp),inLvl=S.xp%100;$("#lvlNum").textContent=lvl;$("#xpText").textContent=`${inLvl} / 100`;$("#xpNext").textContent=`${100-inLvl} XP avant le niveau ${lvl+1}`;$("#xpArc").style.strokeDashoffset=289-(289*inLvl/100);$("#stStreak").textContent=S.streak;$("#stDone").textContent=S.done;const wk=lastNDates(7),focusWk=S.focus.filter(f=>wk.includes(f.date)).reduce((a,b)=>a+b.min,0);$("#stFocus").textContent=focusWk;$("#stTasks").textContent=activeTasks().length;$("#streakDays").innerHTML=wk.map(d=>{const lab=new Date(d).toLocaleDateString("fr-FR",{weekday:"narrow"});return `<div class="sd ${S.days[d]?'hit':''}">${lab}</div>`;}).join("");}
-function renderAll(){renderNow();renderTasks();renderMenu();renderFocusLog();renderMe();}
+function renderMe(){const lvl=lvlOf(S.xp),inLvl=S.xp%100;$("#lvlNum").textContent=lvl;$("#xpText").textContent=`${inLvl} / 100`;$("#xpNext").textContent=`${100-inLvl} XP avant le niveau ${lvl+1}`;$("#xpArc").style.strokeDashoffset=289-(289*inLvl/100);$("#stStreak").textContent=S.streak;$("#stDone").textContent=S.done;const wk=lastNDates(7),focusWk=S.focus.filter(f=>wk.includes(f.date)).reduce((a,b)=>a+b.min,0);$("#stFocus").textContent=focusWk;$("#stTasks").textContent=activeTasks().length;$("#streakDays").innerHTML=wk.map(d=>{const lab=new Date(d).toLocaleDateString("fr-FR",{weekday:"narrow"});return `<div class="sd ${S.days[d]?'hit':''}">${lab}</div>`;}).join("");renderMoodHistory();renderMoodPatterns();renderContacts();const u=currentUser();const pc=$("#profileCard");if(u&&u.profile&&pc){pc.style.display="block";const pr=u.profile,ar=pr.archetype,ac=pr.activations||{};const acts=[ac.sosVisible&&"Bouton SOS toujours accessible",ac.oneStepMode&&"Une seule étape à la fois",ac.rsdMode&&"Ton ultra-bienveillant (RSD)",ac.lateChronotype&&"Rythme du soir respecté",ac.tsaMode&&"Communication explicite, cadre clair",pr.rituals!==false&&"Rituels matin & soir"].filter(Boolean);const head=ar?`<div class="arche" style="background:${ar.couleur};border-radius:16px;padding:16px;margin-bottom:12px"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:2rem">${ar.emoji}</span><div style="text-align:left"><div style="font-family:'Fraunces',serif;font-size:1.2rem">${esc(ar.nom)}</div><div style="font-size:.74rem;opacity:.85">${esc(ar.code)}</div></div></div></div>`:`<p style="font-size:.86rem;color:var(--ink-soft);margin:0 0 10px">Profil léger enregistré. Tu peux le compléter quand tu veux.</p>`;$("#profileBody").innerHTML=head+(acts.length?`<p style="font-size:.84rem;color:var(--ink-soft);margin:0 0 6px">Phare est réglé pour :</p><ul style="margin:0;padding-left:18px;line-height:1.7;font-size:.88rem;color:var(--ink-soft)">${acts.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:"");}else if(pc){pc.style.display="none";}}
+function renderAll(){renderNow();renderTasks();renderMenu();renderFocusLog();renderMe();renderVie();}
 
 /* ---------- nav ---------- */
 function nav(s){$$(".screen").forEach(x=>x.classList.remove("active"));$("#screen-"+s).classList.add("active");$$(".nav-btn").forEach(b=>b.classList.toggle("on",b.dataset.screen===s));document.querySelector("main").scrollTop=0;}
@@ -556,7 +965,7 @@ function openSheet(html){$("#sheet").innerHTML=`<div class="sheet-grab"></div>`+
 function closeSheet(){$("#scrim").classList.remove("show");}
 $("#scrim").addEventListener("click",e=>{if(e.target.id==="scrim")closeSheet();});
 
-function captureSheet(){openSheet(`<h2>Capture rapide</h2><p style="color:var(--ink-faint);font-size:.85rem;margin-top:2px">Vide ta tête avant que l'idée s'évapore. Tu trieras plus tard.</p><div class="field-label">La pensée</div><textarea class="txt" id="capTxt" rows="3" placeholder="Ex : rappeler le client, idée de post, payer la facture…"></textarea><button class="btn btn-go btn-block" style="margin-top:16px" data-action="capture-save">Mettre de côté</button>`);setTimeout(()=>$("#capTxt")?.focus(),120);}
+function captureSheet(){openSheet(`<h2>Capture rapide</h2><p style="color:var(--ink-faint);font-size:.85rem;margin-top:2px">Vide ta tête avant que l'idée s'évapore. Tu trieras plus tard.</p><div class="field-label">La pensée</div><div class="cap-wrap"><textarea class="txt" id="capTxt" rows="3" placeholder="Écris ou dicte : rappeler le client, idée de post, je me sens débordé…"></textarea><button class="mic-btn" id="capMic" data-action="voice" data-target="#capTxt" aria-label="Dicter">🎙</button></div><button class="btn btn-go btn-block" style="margin-top:16px" data-action="capture-save">Mettre de côté</button>`);setTimeout(()=>$("#capTxt")?.focus(),120);}
 
 const STEP_SUGGEST=["Ouvre le doc / l'app","Écris juste 1 ligne","Mets un minuteur de 2 min","Prépare le matériel","Envoie le 1er message","Range l'espace de travail"];
 function taskSheet(id){
@@ -580,7 +989,7 @@ const CLEANSER=[{t:"Respire. 4 sec inspire, 6 sec expire. ×4.",s:40},{t:"Lève-
 let clTimer=null;
 function cleanserSheet(){let step=0;const render=()=>{const c=CLEANSER[step];$("#sheet").innerHTML=`<div class="sheet-grab"></div><h2>Sas de transition</h2><p style="color:var(--ink-faint);font-size:.85rem">Étape ${step+1} / ${CLEANSER.length}</p><div style="text-align:center;padding:30px 10px"><div style="font-family:'Fraunces',serif;font-size:1.45rem;line-height:1.35;margin-bottom:18px">${c.t}</div><div class="timer-dial" id="clDial" style="font-size:3rem">${c.s}</div></div><button class="btn btn-go btn-block" id="clNext">${step<CLEANSER.length-1?"Suivant →":"Terminer, j'enchaîne"}</button><button class="btn btn-ghost btn-block" style="margin-top:8px" data-action="cleanser-stop">Arrêter</button>`;let left=c.s;clearInterval(clTimer);clTimer=setInterval(()=>{left--;const d=$("#clDial");if(d)d.textContent=left;if(left<=0)advance();},1000);$("#clNext").onclick=advance;};const advance=()=>{clearInterval(clTimer);if(step<CLEANSER.length-1){step++;render();}else{closeSheet();awardXP(5);toast("Tête au clair. +5 XP");renderMe();}};$("#scrim").classList.add("show");render();}
 
-const PRO_FEATURES=[["Dopamine Menu","Pioche une dose adaptée à ton temps quand le cerveau cale."],["Mode Quête + récompenses","Transforme les corvées en jeu avec XP et récompense."],["Cartographie du temps","Estimés réalistes : révèle les sous-tâches qu'on oublie."],["Sas de transition","Le rituel 3 min pour enchaîner sans rester bloqué."],["Partenaire fantôme","Relances pendant le focus + sessions 45 min & perso."],["Statistiques avancées","Focus sur 7 jours, calendrier de série."]];
+const PRO_FEATURES=[["Dopamine Menu","Pioche une dose adaptée à ton temps quand le cerveau cale."],["Messages difficiles","Scripts pro : relance impayé, hausse tarifs, dire non, client difficile."],["Mode Quête + récompenses","Transforme les corvées en jeu avec XP et récompense."],["Cartographie du temps","Estimés réalistes : révèle les sous-tâches qu'on oublie."],["Sas de transition","Le rituel 3 min pour enchaîner sans rester bloqué."],["Partenaire fantôme","Relances pendant le focus + sessions 45 min & perso."],["Tendances d'humeur","Tes patterns émotionnels sur 7 jours."],["Stats avancées","Focus sur 7 jours, calendrier de série."]];
 function paywallSheet(){openSheet(`<h2>Passe en Pro</h2><p style="color:var(--ink-faint);font-size:.88rem;margin-top:2px">Débloque tout l'arsenal anti-blocage de Phare.</p><div style="margin:16px 0;display:grid;gap:11px">${PRO_FEATURES.map(f=>`<div class="feat"><span class="ck">✓</span><div><b>${f[0]}</b><div>${f[1]}</div></div></div>`).join("")}</div><div style="text-align:center;background:var(--surface-2);border-radius:16px;padding:16px;margin-bottom:14px"><div style="font-family:'Fraunces',serif;font-size:2.2rem;line-height:1">9,99€<span style="font-size:.9rem;color:var(--ink-faint)"> /mois</span></div><div style="font-size:.78rem;color:var(--ink-faint);margin-top:4px">Annulable à tout moment</div></div><button class="btn btn-go btn-block" data-action="upgrade">Passer Pro</button><button class="btn btn-ghost btn-block" style="margin-top:8px" data-action="sheet-close">Plus tard</button><p class="note">Paiement simulé (démo). Point d'ancrage pour brancher Stripe Checkout + webhook Supabase.</p>`);}
 
 /* ---------- focus timer ---------- */
@@ -598,76 +1007,135 @@ function applyTheme(){document.documentElement.dataset.theme=S.theme;const ic=$(
 /* ---------- complete action ---------- */
 function doNext(){const na=nextAction();if(!na)return;if(na.step){na.step.done=true;awardXP(8);const left=na.task.steps.filter(s=>!s.done).length;if(left===0){finishTask(na.task);return;}toast("Micro-pas validé · +8 XP");}else{finishTask(na.task);return;}save();celebrate();renderNow();renderTasks();renderMe();}
 function finishTask(t){t.done=true;t.inbox=false;S.done++;const xp=t.quest?40:12;awardXP(xp);save();celebrate();toast(t.quest&&t.reward?`Quête finie ! Récompense : ${t.reward}`:`Terminé · +${xp} XP`);renderAll();}
-
 /* ---------- events ---------- */
 document.addEventListener("click",e=>{
   const el=e.target.closest("[data-action]");if(!el)return;
-  const a=el.dataset.action,id=el.dataset.id;
-  switch(a){
-    case "auth-tab": authMode=el.dataset.m; renderAuth(); break;
-    case "auth-submit": authSubmit(); break;
-    case "logout": logout(); break;
-    case "paywall": paywallSheet(); break;
-    case "upgrade": { const u=currentUser(); if(u){u.plan="pro";saveAuth();} applyPlan(); closeSheet(); celebrate(); toast("Bienvenue en Pro. Tout est débloqué."); renderAll(); break; }
-    case "sheet-close": closeSheet(); break;
-    case "nav": nav(el.dataset.screen); break;
-    case "theme-toggle": S.theme=S.theme==="dark"?"light":"dark"; save(); applyTheme(); break;
-    case "capture-open": captureSheet(); break;
-    case "capture-save": { const v=$("#capTxt").value.trim(); if(!v){closeSheet();break;} S.tasks.push({id:uid(),ttl:v,prio:3,steps:[],quest:false,reward:"",estimate:0,done:false,inbox:true,created:Date.now()}); save(); closeSheet(); toast("Capturé. Tu trieras dans Maintenant."); renderNow(); break; }
-    case "inbox-keep": { const t=S.tasks.find(x=>x.id===id); if(t){t.inbox=false;save();toast("Ajouté aux tâches actives");renderNow();renderTasks();} break; }
-    case "energy": { const lv=el.dataset.level; S.energy={date:todayStr(),level:lv}; save(); $$("#screen-now .eb").forEach(b=>b.classList.toggle("on",b.dataset.level===lv)); const hint={haute:"Énergie haute → attaque une tâche Urgente/Importante, ou un bloc focus de 25 min.",moyenne:"Énergie moyenne → un Plat de 20 min, ou avance les étapes d'une tâche en cours.",basse:"Énergie basse → pas de culpabilité. Un Apéritif de 5 min, ou trie ta boîte. L'action douce relance la machine."}[lv]; const h=$("#energyHint"); h.textContent=hint; h.classList.add("show"); break; }
-    case "routine-toggle": { const r=S.routines.find(x=>x.id===id); if(r){r.done=!r.done;r.date=todayStr();if(r.done)awardXP(3);save();renderNow();renderMe();} break; }
-    case "routine-add": { const v=$("#routineInput").value.trim(); if(v){S.routines.push({id:uid(),lbl:v,done:false,date:""});$("#routineInput").value="";save();renderNow();} break; }
-    case "routine-delete": { S.routines=S.routines.filter(x=>x.id!==id); save(); renderNow(); break; }
-    case "task-filter": $$("#taskSeg button").forEach(b=>b.classList.remove("on")); el.classList.add("on"); renderTasks(); break;
-    case "task-open": taskSheet(id); break;
-    case "task-done": { const t=S.tasks.find(x=>x.id===id); if(t&&!t.done){finishTask(t);closeSheet();} break; }
-    case "task-del": { S.tasks=S.tasks.filter(x=>x.id!==id); save(); closeSheet(); toast("Supprimée"); renderAll(); break; }
-    case "now-done": doNext(); break;
-    case "prio-set": { const t=S.tasks.find(x=>x.id===id); if(t){t.prio=+el.dataset.p;save();taskSheet(id);renderTasks();renderNow();} break; }
-    case "step-add": { const inp=$("#stepInput"); const v=inp.value.trim(); if(v){const t=S.tasks.find(x=>x.id===id);t.steps=t.steps||[];t.steps.push({t:v,done:false});t.inbox=false;save();taskSheet(id);renderTasks();renderNow();} break; }
-    case "step-chip": { const t=S.tasks.find(x=>x.id===id); t.steps=t.steps||[]; t.steps.push({t:el.dataset.t,done:false}); t.inbox=false; save(); taskSheet(id); renderTasks(); renderNow(); break; }
-    case "step-toggle": { const t=S.tasks.find(x=>x.id===id); const i=+el.dataset.i; t.steps[i].done=!t.steps[i].done; if(t.steps[i].done)awardXP(5); save(); taskSheet(id); renderTasks(); renderNow(); renderMe(); break; }
-    case "step-del": { const t=S.tasks.find(x=>x.id===id); t.steps.splice(+el.dataset.i,1); save(); taskSheet(id); renderTasks(); break; }
-    case "timemap": { const t=S.tasks.find(x=>x.id===id); const base=t.estimate?t.estimate/2.5:20; t.estimate=Math.round((base||20)*2.5); save(); const o=$("#tmapOut"); o.innerHTML=tmapHTML(t.estimate); o.classList.add("show"); renderTasks(); break; }
-    case "quest-toggle": { const t=S.tasks.find(x=>x.id===id); t.quest=!t.quest; save(); taskSheet(id); renderTasks(); renderNow(); break; }
-    case "reward-save": { const t=S.tasks.find(x=>x.id===id); t.reward=$("#rewardInput").value.trim(); save(); toast("Récompense enregistrée"); break; }
-    case "focus-toggle": toggleFocus(); break;
-    case "dur": { const m=+el.dataset.min; if(el.dataset.pro&&!isPro()){paywallSheet();break;} setDur(m); break; }
-    case "dur-perso": { if(!isPro()){paywallSheet();break;} const v=prompt("Durée en minutes ?","30"); const n=parseInt(v,10); if(n>0&&n<=180){setDur(n);$$("#durRow .dur").forEach(b=>b.classList.remove("on"));} break; }
-    case "cleanser-start": cleanserSheet(); break;
-    case "cleanser-stop": clearInterval(clTimer); closeSheet(); break;
-    case "menu-add": { const map={app:"addApp",ent:"addEnt",side:"addSide"}; const inp=$("#"+map[el.dataset.cat]); const v=inp.value.trim(); if(v){S.menu[el.dataset.cat].push(v);inp.value="";save();renderMenu();} break; }
-    case "menu-delete": { S.menu[el.dataset.cat].splice(+el.dataset.i,1); save(); renderMenu(); break; }
-    case "menu-pick-any": { const pool=[["app","Apéritif",S.menu.app],["ent","Plat",S.menu.ent],["side","À-côté",S.menu.side]].filter(p=>p[2].length); if(!pool.length)break; const pk=pool[Math.floor(Math.random()*pool.length)]; const item=pk[2][Math.floor(Math.random()*pk[2].length)]; const p=$("#picked"); p.innerHTML=`<div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);font-weight:700">${pk[1]}</div><div class="what">${esc(item)}</div><div style="font-size:.82rem;color:var(--ink-soft)">Vas-y maintenant. 5 minutes suffisent à relancer la machine.</div>`; p.classList.add("show"); p.scrollIntoView({behavior:"smooth",block:"center"}); break; }
-    case "reset-data": { openSheet(`<h2>Réinitialiser les données ?</h2><p class="note" style="margin-top:10px">Tâches, routines, XP, séries et sessions seront effacés. Ton compte reste connecté. Irréversible.</p><div style="display:flex;gap:10px;margin-top:18px"><button class="btn btn-ghost" style="flex:1" data-action="sheet-close">Annuler</button><button class="btn btn-go danger" style="flex:1;background:var(--urgent);color:#fff" data-action="reset-confirm">Effacer</button></div>`); break; }
-    case "reset-confirm": { S=defaults(); save(); applyTheme(); applyPlan(); closeSheet(); nav("now"); renderAll(); toast("Données réinitialisées"); break; }
+  const a=el.dataset,act=a.action,id=a.id?+a.id:null;
+  switch(act){
+    /* auth */
+    case "auth-tab":authMode=a.m;renderAuth();break;
+    case "auth-submit":authSubmit();break;
+    case "logout":logout();break;
+    /* onboarding */
+    case "onb-next":onbNext();break;
+    case "onb-like":setLike(a.m,+a.i,+a.v);break;
+    case "onb-skip":finishOnboarding(true);break;
+    case "onb-finish":finishOnboarding(false);break;
+    case "onb-restart":{const u=currentUser();if(u){u.onboarded=false;saveAuth();}closeSheet();startOnboarding();break;}
+    /* legal */
+    case "legal-open":legalSheet();break;
+    case "legal-tab":legalSheet(a.t);break;
+    case "vie-open":vieView=a.view;renderVie();{const sv=document.getElementById("screen-vie");if(sv)sv.scrollTop=0;}break;
+    case "vie-back":vieView="hub";renderVie();break;
+    case "fin-add-acc":{const nm=prompt("Nom du compte ?");if(!nm)break;const b=parseFloat((prompt("Solde actuel (€) ?","0")||"").replace(",","."));S.finances.accounts.push({id:uid(),name:nm.trim(),balance:isNaN(b)?0:b,red:200,orange:600});save();renderVie();toast("Compte ajouté");break;}
+    case "fin-edit-acc":{const ac=S.finances.accounts.find(x=>x.id===a.id);if(!ac)break;const b=prompt("Nouveau solde de "+ac.name+" (€) ?",ac.balance);if(b===null)break;const v=parseFloat((b||"").replace(",","."));if(!isNaN(v)){ac.balance=v;save();renderVie();}break;}
+    case "fin-del-acc":{S.finances.accounts=S.finances.accounts.filter(x=>x.id!==a.id);save();renderVie();break;}
+    case "fin-add-ech":{const l=prompt("Libellé de l'échéance ?");if(!l)break;const m=parseFloat((prompt("Montant (€) ?","0")||"").replace(",","."));const d=(prompt("Date (AAAA-MM-JJ), ou vide :","")||"").trim();S.finances.echeances.push({id:uid(),label:l.trim(),amount:isNaN(m)?0:m,date:d});save();renderVie();toast("Échéance ajoutée");break;}
+    case "fin-del-ech":{S.finances.echeances=S.finances.echeances.filter(x=>x.id!==a.id);save();renderVie();break;}
+    case "fam-add-ev":{const t=prompt("Quel rendez-vous ?");if(!t)break;const d=(prompt("Date (AAAA-MM-JJ), ou vide :","")||"").trim();const pl=(prompt("Lieu (optionnel) :","")||"").trim();S.family.events.push({id:uid(),title:t.trim(),date:d,place:pl});save();renderVie();toast("RDV ajouté");break;}
+    case "fam-del-ev":{S.family.events=S.family.events.filter(x=>x.id!==a.id);save();renderVie();break;}
+    case "fam-add-load":{const i=document.getElementById("famLoadInput"),v=i?i.value.trim():"";if(v){S.family.load.push({id:uid(),t:v,done:false});if(i)i.value="";save();renderVie();}break;}
+    case "fam-load-toggle":{const l=S.family.load.find(x=>x.id===a.id);if(l){l.done=!l.done;save();renderVie();}break;}
+    case "fam-del-load":{S.family.load=S.family.load.filter(x=>x.id!==a.id);save();renderVie();break;}
+    /* nav + theme */
+    case "nav":nav(a.screen);if(a.screen==="vie"){vieView="hub";renderVie();}break;
+    case "theme-toggle":S.theme=S.theme==="dark"?"light":"dark";save();applyTheme();break;
+    /* SOS */
+    case "sos-open":openSOS();break;
+    case "sos-close":closeSOS();break;
+    case "sos-back":sosView="menu";clearInterval(breathTimer);renderSOS();break;
+    case "sos-tech":sosView=a.t;renderSOS();break;
+    case "sos-breath":openSOS();sosView="breath";renderSOS();break;
+    case "sos-to-contacts":closeSOS();nav("me");break;
+    case "anchor-next":renderAnchor(+a.i);break;
+    /* mood */
+    case "mood-pick":saveMood(a.v);break;
+    /* rituals */
+    case "ritual-open":ritualSheet(a.kind);break;
+    case "ritual-done":{const t=todayStr();S.ritualLog[t]=S.ritualLog[t]||{};S.ritualLog[t][a.kind]=true;awardXP(5);save();closeSheet();renderRitualSlot();renderMe();toast("Rituel posé · +5 XP");break;}
+    /* scripts */
+    case "scripts-open":isPro()?scriptsSheet():paywallSheet();break;
+    case "script-copy":{const s=SCRIPTS[+a.i];if(s){navigator.clipboard&&navigator.clipboard.writeText(s.b);el.textContent="✓ Copié";setTimeout(()=>{el.textContent="Copier";},1800);}break;}
+    /* contacts */
+    case "contact-add":{const n=prompt("Prénom du contact ?");if(!n)break;const p=prompt("Son numéro ?");if(!p)break;S.trustedContacts.push({id:uid(),name:n.trim(),phone:p.trim()});save();renderContacts();renderVie();toast("Contact ajouté");break;}
+    case "contact-del":S.trustedContacts=S.trustedContacts.filter(x=>x.id!==a.id);save();renderContacts();renderVie();break;
+    /* energy */
+    case "energy":{S.energy={date:todayStr(),level:a.level};save();const tips={haute:"Énergie haute : attaque la tâche la plus exigeante. C'est le moment.",moyenne:"Énergie moyenne : une tâche normale, ou découpe une grosse en petits pas.",basse:"Énergie basse : une seule micro-action douce. Et c'est déjà bien."};const hint=$("#energyHint");hint.textContent=tips[a.level];hint.classList.add("show");renderNow();break;}
+    /* capture */
+    case "capture-open":captureSheet();break;
+    case "capture-save":{const v=$("#capTxt").value.trim();if(!v){closeSheet();break;}const {cat,gentle}=categorize(v);S.tasks.push({id:Date.now(),ttl:v,prio:3,steps:[],done:false,inbox:true,created:Date.now(),cat});save();closeSheet();renderNow();toast(gentle);if(cat==="emotion"){nav("now");setTimeout(()=>{const mr=$("#moodReply");},200);}break;}
+    case "voice":voiceInput(a.target,el);break;
+    /* now */
+    case "now-done":doNext();break;
+    case "inbox-keep":{const t=S.tasks.find(x=>x.id===id);if(t){t.inbox=false;save();renderNow();renderTasks();toast("Gardée dans tes tâches");}break;}
+    /* routine */
+    case "routine-toggle":{const r=S.routines.find(x=>x.id===a.id);if(r){r.done=!r.done;r.date=todayStr();if(r.done){awardXP(3);toast("+3 XP");}save();renderNow();renderMe();}break;}
+    case "routine-add":{const i=$("#routineInput"),v=i.value.trim();if(v){S.routines.push({id:uid(),lbl:v,done:false,date:""});i.value="";save();renderNow();}break;}
+    case "routine-delete":S.routines=S.routines.filter(x=>x.id!==a.id);save();renderNow();break;
+    /* tasks */
+    case "task-filter":$$("#taskSeg button").forEach(b=>b.classList.toggle("on",b===el));renderTasks();break;
+    case "task-open":taskSheet(id);break;
+    case "task-done":{const t=S.tasks.find(x=>x.id===id);if(t&&!t.done){finishTask(t);closeSheet();}break;}
+    case "task-del":{S.tasks=S.tasks.filter(x=>x.id!==id);save();closeSheet();renderAll();toast("Tâche supprimée");break;}
+    case "now-done2":break;
+    case "prio-set":{const t=S.tasks.find(x=>x.id===id);if(t){t.prio=+a.p;save();taskSheet(id);renderTasks();renderNow();}break;}
+    case "step-add":{const i=$("#stepInput"),v=i.value.trim();if(v){const t=S.tasks.find(x=>x.id===id);t.steps=t.steps||[];t.steps.push({t:v,done:false});save();taskSheet(id);renderTasks();renderNow();}break;}
+    case "step-chip":{const t=S.tasks.find(x=>x.id===id);t.steps=t.steps||[];t.steps.push({t:a.t,done:false});save();taskSheet(id);renderTasks();renderNow();break;}
+    case "step-toggle":{const t=S.tasks.find(x=>x.id===id);const st=t.steps[+a.i];st.done=!st.done;if(st.done)awardXP(5);save();taskSheet(id);renderTasks();renderNow();renderMe();break;}
+    case "step-del":{const t=S.tasks.find(x=>x.id===id);t.steps.splice(+a.i,1);save();taskSheet(id);renderTasks();break;}
+    case "timemap":{const t=S.tasks.find(x=>x.id===id);t.estimate=Math.round((8+Math.random()*22)*2.5);save();const o=$("#tmapOut");o.innerHTML=tmapHTML(t.estimate);o.classList.add("show");break;}
+    case "quest-toggle":{const t=S.tasks.find(x=>x.id===id);t.quest=!t.quest;save();taskSheet(id);renderTasks();break;}
+    case "reward-save":{const t=S.tasks.find(x=>x.id===id),v=$("#rewardInput").value.trim();t.reward=v;save();toast("Récompense enregistrée");break;}
+    /* focus */
+    case "dur":{if(a.pro&&!isPro()){paywallSheet();break;}setDur(+a.min);break;}
+    case "dur-perso":{if(!isPro()){paywallSheet();break;}const v=prompt("Durée en minutes ?","30");const m=parseInt(v,10);if(m>0&&m<=180)setDur(m);break;}
+    case "focus-toggle":toggleFocus();break;
+    case "cleanser-start":isPro()?cleanserSheet():paywallSheet();break;
+    case "cleanser-stop":clearInterval(clTimer);closeSheet();break;
+    /* boost */
+    case "menu-pick-any":{const all=[...S.menu.app.map(x=>["Apéritif",x]),...S.menu.ent.map(x=>["Plat",x]),...S.menu.side.map(x=>["À-côté",x])];if(!all.length)break;const p=all[Math.floor(Math.random()*all.length)];const el2=$("#picked");el2.innerHTML=`<div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:700">${p[0]}</div><div class="what">${esc(p[1])}</div><button class="btn btn-go btn-sm" data-action="menu-pick-any">Une autre</button>`;el2.classList.add("show");break;}
+    case "menu-add":{const map={app:"#addApp",ent:"#addEnt",side:"#addSide"},i=$(map[a.cat]),v=i.value.trim();if(v){S.menu[a.cat].push(v);i.value="";save();renderMenu();}break;}
+    case "menu-delete":S.menu[a.cat].splice(+a.i,1);save();renderMenu();break;
+    /* paywall */
+    case "paywall":paywallSheet();break;
+    case "upgrade":{const u=currentUser();if(u){u.plan="pro";saveAuth();}applyPlan();closeSheet();celebrate();toast("Bienvenue en Pro. Tout est débloqué.");renderAll();break;}
+    case "sheet-close":closeSheet();break;
+    /* data */
+    case "reset-data":{if(confirm("Effacer toutes tes données (tâches, humeur, focus, XP) ? Ton compte est conservé. Action irréversible.")){S=defaults();save();closeSheet();applyTheme();renderAll();applyPlan();toast("Données réinitialisées");}break;}
   }
 });
 document.addEventListener("keydown",e=>{
-  if(e.key!=="Enter")return;const t=e.target;
-  if(t.closest("#auth")){e.preventDefault();authSubmit();return;}
-  if(t.id==="routineInput"){e.preventDefault();document.querySelector('[data-action="routine-add"]').click();}
-  if(t.id==="stepInput"){e.preventDefault();document.querySelector('[data-action="step-add"]').click();}
+  if(e.key!=="Enter")return;
+  const t=e.target;
+  if(t.id==="authPwd"||t.id==="authEmail"){e.preventDefault();authSubmit();}
+  else if(t.id==="routineInput"){e.preventDefault();const v=t.value.trim();if(v){S.routines.push({id:uid(),lbl:v,done:false,date:""});t.value="";save();renderNow();}}
+  else if(t.id==="stepInput"){e.preventDefault();const btn=$('[data-action="step-add"]');if(btn)btn.click();}
+  else if(t.id==="famLoadInput"){e.preventDefault();const btn=$('[data-action="fam-add-load"]');if(btn)btn.click();}
 });
 
 /* ---------- boot ---------- */
-load(); loadAuth(); applyTheme(); setDur(25); renderAll(); applyPlan();
-if(currentUser()){ $("#auth").classList.add("hidden"); } else { showAuth(); }
+function boot(){
+  load();loadAuth();applyTheme();setDur(25);renderAll();applyPlan();
+  const u=currentUser();
+  if(!u){showAuth();}
+  else if(!u.onboarded){$("#auth").classList.add("hidden");startOnboarding();}
+  else{$("#auth").classList.add("hidden");}
+}
+boot();
 
-/* ---------- PWA / install ---------- */
-if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
+/* ---------- PWA install ---------- */
 let deferredPrompt=null;
-const _isStandalone=()=>matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
-const _isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
-function installEligible(){if(_isStandalone())return false;const sn=Store.get('phare.installSnooze');if(sn&&Date.now()<+sn)return false;return true;}
-function showInstallPop(){if(!installEligible())return;const ios=_isIOS();$('#ipAndroid').style.display=ios?'none':'block';$('#ipIos').style.display=ios?'block':'none';$('#installBtn').style.display=ios?'none':'inline-flex';$('#installPop').classList.add('show');}
-function hideInstallPop(days){$('#installPop').classList.remove('show');if(days)Store.set('phare.installSnooze',String(Date.now()+days*864e5));}
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;});
-window.addEventListener('appinstalled',()=>{hideInstallPop(0);toast('Phare install\u00e9');});
-$('#installBtn').addEventListener('click',async()=>{if(deferredPrompt){deferredPrompt.prompt();const{outcome}=await deferredPrompt.userChoice;deferredPrompt=null;hideInstallPop(outcome==='accepted'?0:2);if(outcome==='accepted')toast('Phare install\u00e9');}else{toast("Menu du navigateur \u2192 \u00ab Installer l'application \u00bb");}});
-$('#installLater').addEventListener('click',()=>hideInstallPop(3));
-setTimeout(showInstallPop,700);
+if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{});});}
+function inApp(){return $("#auth").classList.contains("hidden")&&$("#onboard").classList.contains("hidden");}
+function isStandalone(){return window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone===true;}
+function showInstallPop(){if(isStandalone())return;if(Store.get("phare.install")==="off")return;if(!inApp())return;if($("#installPop").classList.contains("show"))return;const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;if(isIOS&&!deferredPrompt){$("#ipAndroid").style.display="none";$("#ipIos").style.display="block";$("#installBtn").style.display="none";}else if(!deferredPrompt&&!isIOS){return;}$("#installPop").classList.add("show");}
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;setTimeout(showInstallPop,2600);});
+window.addEventListener("appinstalled",()=>{$("#installPop").classList.remove("show");Store.set("phare.install","off");deferredPrompt=null;});
+setTimeout(()=>{if(/iPad|iPhone|iPod/.test(navigator.userAgent))showInstallPop();},2800);
+document.addEventListener("click",e=>{
+  if(e.target.id==="installBtn"){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.finally(()=>{deferredPrompt=null;$("#installPop").classList.remove("show");});}else{$("#installPop").classList.remove("show");}}
+  if(e.target.id==="installLater"){$("#installPop").classList.remove("show");Store.set("phare.install","off");}
+});
 </script>
 </body>
 </html>
